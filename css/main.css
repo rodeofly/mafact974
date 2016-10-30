@@ -70,14 +70,18 @@ h1 {
   padding :0;
 
 }
+
+#slider {
+  width : 25%;
+}
+
+
 #mafate {
   position : absolute;
   margin:100px;
   display : block;
   height : 500px;
   background : rgba(0,255,0,0.25);
-
-
 }
 
 #echelles {
@@ -105,7 +109,7 @@ h1 {
 .via .echelle {
   position: absolute;
   left:0px;
-  bottom:0px;
+  bottom:0px !important;
 }
 
 .spot {
@@ -125,7 +129,6 @@ h1 {
   border : solid black 2px;
   border-radius:25px;
 }
-
 
 .via {
   position : absolute;
@@ -150,24 +153,17 @@ h1 {
 }
 
 .ilet .info {
-  top:0px;
   font-size : 3em;
 }
 .echelle .info {
   font-size : 2em;
-  top:0px;
-    background : rgba(255,255,255,0.5);
+  background : rgba(255,255,255,0.5);
 }
-
-
-
 
 .shine-yellow { box-shadow : 0px 0px 5px 5px yellow  !important; }
 .shine-white  { box-shadow : 0px 0px 5px 5px white !important; }
 .shine-wrong  { box-shadow : 0px 0px 5px 5px red !important; }
 .shine-right  { box-shadow : 0px 0px 5px 5px blue !important; }
-
-
 
 a#solution {
   color : white;
