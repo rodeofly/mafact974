@@ -89,6 +89,8 @@ html {
   position:absolute;
   padding : 25px;
   margin : 0;
+  top : 5px;
+  right: 5px;
   background : rgba(0,0,255,0.25);
   border-radius: 50px;
   border: solid black 5px;
@@ -117,7 +119,7 @@ html {
   position : relative;
   display : inline-block;
   height : 100%;
-  width : 150px;
+  width : 100px;
   margin : 2px;
   padding:0;
 }
@@ -128,7 +130,7 @@ html {
   width : 100%;
   background : brown;
   border : solid black 2px;
-  border-radius:25px;
+  border-radius: 25px 25px 0px 0px;
 }
 
 .via {
