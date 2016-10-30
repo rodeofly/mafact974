@@ -5,9 +5,9 @@
 
   if ((base = Array.prototype).shuffle == null) {
     base.shuffle = function() {
-      var i, j, k, ref, ref1;
+      var i, j, l, ref, ref1;
       if (this.length > 1) {
-        for (i = k = ref = this.length - 1; ref <= 1 ? k <= 1 : k >= 1; i = ref <= 1 ? ++k : --k) {
+        for (i = l = ref = this.length - 1; ref <= 1 ? l <= 1 : l >= 1; i = ref <= 1 ? ++l : --l) {
           j = Math.floor(Math.random() * (i + 1));
           ref1 = [this[j], this[i]], this[i] = ref1[0], this[j] = ref1[1];
         }
@@ -86,10 +86,10 @@
       }
     };
     draw = function() {
-      var echelle, height, i, ilet, k, l, len, len1;
+      var echelle, height, i, ilet, l, len, len1, m;
       $("#mafate, #echelles").empty();
-      for (k = 0, len = ilets.length; k < len; k++) {
-        i = ilets[k];
+      for (l = 0, len = ilets.length; l < len; l++) {
+        i = ilets[l];
         ilet = new Ilet(i);
         height = 50 * i;
         $("#mafate").append(ilet.html);
@@ -97,8 +97,8 @@
           'height': height + "px"
         });
       }
-      for (l = 0, len1 = echelles.length; l < len1; l++) {
-        i = echelles[l];
+      for (m = 0, len1 = echelles.length; m < len1; m++) {
+        i = echelles[m];
         echelle = new Echelle(i);
         height = 50 * i;
         $("#echelles").append(echelle.html);
@@ -133,24 +133,36 @@
     draw();
     checkit();
     go = function() {
-      var c, dice, e, elu, i, ilet, index, j, k, l, n, ref, ref1;
+      var c, dice, e, elu, i, ilet, index, j, k, l, lop, m, n, ref, ref1;
       n = parseInt($("#amount-slider").html());
       echelles = [];
       dice = Math.floor(Math.random() * 10) + 1;
       ilets = [dice];
-      for (i = k = 0, ref = n - 2; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
-        e = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        for (j = l = -10; l <= 10; j = ++l) {
-          c = ilets[i] + j;
-          if ((j === 0) || (ref1 = Math.abs(j), indexOf.call(echelles, ref1) >= 0) || (c > 10) || (c < 1) || (indexOf.call(ilets, c) >= 0)) {
-            index = e.indexOf(j);
-            e.splice(index, 1);
+      e = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      lop = true;
+      k = 0;
+      while (lop && (k < 100000)) {
+        lop = false;
+        k++;
+        for (i = l = 0, ref = n - 2; 0 <= ref ? l <= ref : l >= ref; i = 0 <= ref ? ++l : --l) {
+          e = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+          for (j = m = -10; m <= 10; j = ++m) {
+            c = ilets[i] + j;
+            if ((j === 0) || (ref1 = Math.abs(j), indexOf.call(echelles, ref1) >= 0) || (c > 10) || (c < 1) || (indexOf.call(ilets, c) >= 0)) {
+              index = e.indexOf(j);
+              e.splice(index, 1);
+            }
+          }
+          if (e.length) {
+            elu = (e.shuffle())[0];
+            echelles.push(Math.abs(elu));
+            ilet = ilets[i] + elu;
+            ilets.push(ilet);
+          } else {
+            lop = true;
+            break;
           }
         }
-        elu = (e.shuffle())[0];
-        echelles.push(Math.abs(elu));
-        ilet = ilets[i] + elu;
-        ilets.push(ilet);
       }
       solution = ilets.slice(0);
       ilets.shuffle();

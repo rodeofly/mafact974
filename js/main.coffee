@@ -108,17 +108,28 @@ $ ->
     echelles = []
     dice = Math.floor(Math.random() * 10) + 1
     ilets = [ dice ]
-    for i in [0..n-2]
-      e = [-10..10]
-      for j in [-10..10]
-        c = ilets[i] + j
-        if ( (j is 0) or (Math.abs(j) in echelles) or (c > 10) or (c < 1) or (c in ilets) )
-          index = e.indexOf(j)
-          e.splice(index, 1)
-      elu = (e.shuffle())[0]
-      echelles.push Math.abs(elu)
-      ilet = ilets[i] + elu
-      ilets.push( ilet )
+    e = [-10..10]
+    lop = true
+    k = 0
+    while (lop and (k<100000))
+      lop = false
+      k++
+      for i in [0..n-2]
+        e = [-10..10]
+        for j in [-10..10]
+          c = ilets[i] + j
+          if ( (j is 0) or (Math.abs(j) in echelles) or (c > 10) or (c < 1) or (c in ilets) )
+            index = e.indexOf(j)
+            e.splice(index, 1)
+        if e.length
+          elu = (e.shuffle())[0]
+          echelles.push Math.abs(elu)
+          ilet = ilets[i] + elu
+          ilets.push( ilet )
+        else
+          lop = true
+          break
+        
     solution = ilets.slice(0)
     ilets.shuffle()
     echelles.shuffle()
