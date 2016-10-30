@@ -133,24 +133,21 @@
     draw();
     checkit();
     go = function() {
-      var c, dice, e, elu, i, ilet, index, j, k, l, lop, m, n, ref, ref1;
+      var c, e, elu, i, ilet, j, k, l, lop, m, n, ref, ref1, ref2;
       n = parseInt($("#amount-slider").html());
       echelles = [];
-      dice = Math.floor(Math.random() * 10) + 1;
-      ilets = [dice];
-      e = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      lop = true;
+      ilets = [Math.floor(Math.random() * 10) + 1];
+      ref = [true, 0], lop = ref[0], k = ref[1];
       k = 0;
-      while (lop && (k < 100000)) {
+      while (lop && (k < 1000)) {
         lop = false;
         k++;
-        for (i = l = 0, ref = n - 2; 0 <= ref ? l <= ref : l >= ref; i = 0 <= ref ? ++l : --l) {
-          e = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        for (i = l = 0, ref1 = n - 2; 0 <= ref1 ? l <= ref1 : l >= ref1; i = 0 <= ref1 ? ++l : --l) {
+          e = [];
           for (j = m = -10; m <= 10; j = ++m) {
             c = ilets[i] + j;
-            if ((j === 0) || (ref1 = Math.abs(j), indexOf.call(echelles, ref1) >= 0) || (c > 10) || (c < 1) || (indexOf.call(ilets, c) >= 0)) {
-              index = e.indexOf(j);
-              e.splice(index, 1);
+            if (!(j === 0 || (ref2 = Math.abs(j), indexOf.call(echelles, ref2) >= 0) || indexOf.call([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], c) < 0 || indexOf.call(ilets, c) >= 0)) {
+              e.push(j);
             }
           }
           if (e.length) {

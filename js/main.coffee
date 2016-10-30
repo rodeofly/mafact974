@@ -106,21 +106,18 @@ $ ->
   go = ->
     n = parseInt $( "#amount-slider" ).html()
     echelles = []
-    dice = Math.floor(Math.random() * 10) + 1
-    ilets = [ dice ]
-    e = [-10..10]
-    lop = true
+    ilets = [ Math.floor(Math.random() * 10) + 1 ]
+    [lop, k] = [true, 0]
     k = 0
-    while (lop and (k<100000))
+    while (lop and (k<1000))
       lop = false
       k++
       for i in [0..n-2]
-        e = [-10..10]
+        e = []
         for j in [-10..10]
           c = ilets[i] + j
-          if ( (j is 0) or (Math.abs(j) in echelles) or (c > 10) or (c < 1) or (c in ilets) )
-            index = e.indexOf(j)
-            e.splice(index, 1)
+          if not (j is 0 or Math.abs(j) in echelles or c not in [1..10] or c in ilets )
+            e.push j
         if e.length
           elu = (e.shuffle())[0]
           echelles.push Math.abs(elu)
