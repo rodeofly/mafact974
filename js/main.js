@@ -49,39 +49,31 @@
   $(function() {
     var checkit, draw, go;
     checkit = function() {
-      var blues, ech;
+      var bleues, scales;
       $(".echelle").removeClass("shine-right shine-wrong");
       $(".spot").each(function() {
-        var bottom, current_alt, d, echelle, height, next_alt, via;
+        var bottom, curr_alt, deniv, height, next_alt, scale, via;
         via = $(this).find(".via").show();
         if ($(this).next(".spot").length) {
-          current_alt = parseInt($(this).find(".ilet").attr("data-altitude"));
+          curr_alt = parseInt($(this).find(".ilet").attr("data-altitude"));
           next_alt = parseInt($(this).next(".spot").find(".ilet").attr("data-altitude"));
-          d = current_alt - next_alt;
-          height = (Math.abs(d)) + "0%";
-          if (d > 0) {
-            bottom = next_alt + "0%";
-          } else {
-            bottom = current_alt + "0%";
-          }
-          via.attr("data-denivelle", d).css({
+          deniv = curr_alt - next_alt;
+          height = (Math.abs(deniv)) + "0%";
+          bottom = (deniv > 0 ? next_alt : curr_alt) + "0%";
+          via.attr("data-denivelle", deniv).css({
             'height': height,
             'bottom': bottom,
             'bottom': bottom
           });
-          echelle = parseInt(via.find(".echelle").attr("data-hauteur"));
-          if (echelle !== Math.abs(current_alt - next_alt)) {
-            return via.find(".echelle").addClass("shine-wrong");
-          } else {
-            return via.find(".echelle").addClass("shine-right");
-          }
+          scale = parseInt(via.find(".echelle").attr("data-hauteur"));
+          return via.find(".echelle").addClass(scale !== deniv ? "shine-wrong" : "shine-right");
         }
       });
       $(".spot").last().find(".echelle").appendTo("#echelles");
       $(".spot").last().find(".via").hide();
-      blues = $(".shine-right").length;
-      ech = $(".echelle").length;
-      if (ech === blues) {
+      bleues = $(".shine-right").length;
+      scales = $(".echelle").length;
+      if (bleues === scales) {
         return alert("gagné !");
       }
     };

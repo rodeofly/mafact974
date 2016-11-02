@@ -30,39 +30,32 @@ class Echelle
     """
   
 $ ->
-
-  
-
   checkit = -> 
     $( ".echelle" ).removeClass( "shine-right shine-wrong" )
     $( ".spot" ).each ->
       via = $(this).find( ".via" ).show()
       if $(this).next(".spot").length
-        current_alt = parseInt $(this).find( ".ilet" ).attr( "data-altitude" )
+        curr_alt = parseInt $(this).find( ".ilet" ).attr( "data-altitude" )
         next_alt = parseInt $(this).next(".spot").find( ".ilet" ).attr( "data-altitude" )
-        d = current_alt - next_alt
-        height = "#{Math.abs(d)}0%"    
-        if (d > 0)
-          bottom = "#{next_alt}0%"
-        else
-          bottom = "#{current_alt}0%"
+        deniv = curr_alt - next_alt
+        height = "#{Math.abs(deniv)}0%"
+        bottom = "#{if (deniv > 0) then next_alt else curr_alt}0%"
         via
-          .attr "data-denivelle", d
+          .attr "data-denivelle", deniv
           .css
             'height': height
             'bottom': bottom
             'bottom': bottom
-        echelle  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
-        if echelle isnt Math.abs(current_alt - next_alt)
-          via.find( ".echelle" ).addClass( "shine-wrong" )
-        else
-          via.find( ".echelle" ).addClass( "shine-right" )
+        
+        scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
+        via.find( ".echelle" ).addClass( if scale isnt deniv then "shine-wrong" else "shine-right" )
+    
     $( ".spot" ).last().find( ".echelle" ).appendTo( "#echelles" )
     $( ".spot" ).last().find(".via").hide()
     
-    blues = $( ".shine-right" ).length
-    ech = $( ".echelle" ).length
-    alert "gagné !" if ech is blues
+    bleues = $( ".shine-right" ).length
+    scales = $( ".echelle" ).length
+    alert "gagné !" if bleues is scales
      
   draw = ->
     $( "#mafate, #echelles" ).empty()
