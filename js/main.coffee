@@ -5,10 +5,10 @@ Array::shuffle ?= ->
   this
 
 ID = 1
-solution = [1,2,10,3,9,4,8,5]
-ilets = solution.slice(0)
-ilets.shuffle()
-echelles = [1,3,4,5,6,7,8]
+SOLUTION = [1,2,10,3,9,4,8,5]
+ILETS = SOLUTION.slice(0)
+ILETS.shuffle()
+ECHELLES = [1,3,4,5,6,7,8]
 
 class Ilet
   constructor: (@altitude) ->
@@ -30,28 +30,39 @@ class Echelle
     """
   
 $ ->
+  $( "#parametres" ).dialog(width : '400px')
+  $( "#param_button" )
+    .button()
+    .on "click", -> $( "#parametres" ).dialog( "open" )
+    
   checkit = -> 
     $( ".echelle" ).removeClass( "shine-right shine-wrong" )
     $( ".spot" ).each ->
-      via = $(this).find( ".via" ).show()
-      if $(this).next(".spot").length
+      $next_spot = $(this).next(".spot")
+      via = $(this).find( ".via" )         
+      if $next_spot.length 
         curr_alt = parseInt $(this).find( ".ilet" ).attr( "data-altitude" )
-        next_alt = parseInt $(this).next(".spot").find( ".ilet" ).attr( "data-altitude" )
+        next_alt = parseInt $next_spot.find( ".ilet" ).attr( "data-altitude" )
         deniv = curr_alt - next_alt
-        height = "#{Math.abs(deniv)}0%"
+        height = Math.abs(deniv)
         bottom = "#{if (deniv > 0) then next_alt else curr_alt}0%"
         via
           .attr "data-denivelle", deniv
           .css
-            'height': height
+            'height': "#{height}0%"
             'bottom': bottom
             'bottom': bottom
-        
-        scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
-        via.find( ".echelle" ).addClass( if scale isnt deniv then "shine-wrong" else "shine-right" )
-    
-    $( ".spot" ).last().find( ".echelle" ).appendTo( "#echelles" )
-    $( ".spot" ).last().find(".via").hide()
+          .show()
+            
+        if via.find( ".echelle" ).length > 0
+          scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
+          console.log scale,height
+          if scale is height
+            via.find( ".echelle" ).addClass "shine-right"
+          else via.find( ".echelle" ).addClass "shine-wrong" 
+      else
+        via.find( ".echelle" ).appendTo( "#echelles" )
+        via.hide()
     
     bleues = $( ".shine-right" ).length
     scales = $( ".echelle" ).length
@@ -59,19 +70,15 @@ $ ->
      
   draw = ->
     $( "#mafate, #echelles" ).empty()
-    for i in ilets
+    for i in ILETS
       ilet = new Ilet(i)
-      height = 50*i
       $( "#mafate" ).append ilet.html
-      $( ".ilet[data-altitude='#{ilet.altitude}']" ).css
-        'height': "#{height}px"
+      $( ".ilet[data-altitude='#{ilet.altitude}']" ).css 'height': "#{50*i}px"
       
-    for i in echelles
+    for i in ECHELLES
       echelle = new Echelle(i)
-      height = 50*i
       $( "#echelles" ).append echelle.html
-      $( ".echelle[data-hauteur='#{echelle.hauteur}']" ).css
-        'height': "#{height}px" 
+      $( ".echelle[data-hauteur='#{echelle.hauteur}']" ).css 'height': "#{50*i}px" 
     
     $( "#mafate" ).sortable
       stop: -> checkit()
@@ -91,15 +98,12 @@ $ ->
           left : 0
           bottom : 0
           top: ''
-        checkit()   
-          
-  draw()
-  checkit()
+        checkit()
      
   go = ->
     n = parseInt $( "#amount-slider" ).html()
-    echelles = []
-    ilets = [ Math.floor(Math.random() * 10) + 1 ]
+    ECHELLES = []
+    ILETS = [ Math.floor(Math.random() * 10) + 1 ]
     [lop, k] = [true, 0]
     k = 0
     while (lop and (k<1000))
@@ -108,36 +112,35 @@ $ ->
       for i in [0..n-2]
         e = []
         for j in [-10..10]
-          c = ilets[i] + j
-          if not (j is 0 or Math.abs(j) in echelles or c not in [1..10] or c in ilets )
+          c = ILETS[i] + j
+          if not (j is 0 or Math.abs(j) in ECHELLES or c not in [1..10] or c in ILETS )
             e.push j
         if e.length
           elu = (e.shuffle())[0]
-          echelles.push Math.abs(elu)
-          ilet = ilets[i] + elu
-          ilets.push( ilet )
+          ECHELLES.push Math.abs(elu)
+          ilet = ILETS[i] + elu
+          ILETS.push( ilet )
         else
           lop = true
           break
         
-    solution = ilets.slice(0)
-    ilets.shuffle()
-    echelles.shuffle()
+    SOLUTION = ILETS.slice(0)
+    ILETS.shuffle()
+    ECHELLES.shuffle()
     draw()
     checkit()
         
-
   $( "#slider" ).slider
     range: "max"
     min   : 2
-    max   : 10
+    max   : 8
     step  : 1
-    value : 3
+    value : 7
     slide : ( event, ui ) -> 
       $( "#amount-slider" ).html( ui.value )
       go()
         
-  $( "#amount-slider" ).html("3")    
+  $( "#amount-slider" ).html("7")    
   
   $( "#random" )
     .button()
@@ -146,7 +149,10 @@ $ ->
   $( "#solution" )
     .button()
     .on "click", ->
-      ilets = solution
+      ILETS = SOLUTION
       draw()
       checkit()
+ 
+  draw()
+  checkit()
 
