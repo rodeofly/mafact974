@@ -208,6 +208,9 @@
       draw();
       return checkit();
     });
+    $("#close").button().on("click", function() {
+      return $("#parametres").dialog("close");
+    });
     return $("#random").trigger("click");
   });
 

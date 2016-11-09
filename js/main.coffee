@@ -159,6 +159,10 @@ $ ->
       ILETS = SOLUTION
       draw()
       checkit()
- 
+  
+  $( "#close" )
+    .button()
+    .on "click", ->
+      $( "#parametres" ).dialog "close"
   $( "#random" ).trigger "click"
 
