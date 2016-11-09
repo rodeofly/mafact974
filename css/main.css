@@ -56,7 +56,8 @@ textarea {
    Author's custom styles
    ========================================================================== */
 html { 
-  background: url(images/trois_cirques.jpg) no-repeat center center fixed; 
+  /*background: url(images/trois_cirques.jpg) no-repeat center center fixed;*/
+  background : #ae7657;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -70,6 +71,36 @@ html {
 
 }
 
+#gagne {
+  width : 100%;
+  text-align : center;
+  color: #fff;
+  font-family: Monoton;
+  font-size : 4em;
+  -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
+  -moz-animation: neon1 1.5s ease-in-out infinite alternate;
+  animation: neon1 1.5s ease-in-out infinite alternate;
+}
+
+
+@-webkit-keyframes neon1 {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
+  }
+  to {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
+  }
+}
+@-moz-keyframes neon1 {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
+  }
+  to {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
+  }
+}
+
+
 #caption {
   font-size:1em;
   margin : 0;
@@ -80,20 +111,30 @@ html {
   width : 100%;
 }
 
+#param_button {
+  position : absolute;
+  top:0;
+  left : 0;
+  z-index : 10000;
+
+}
 
 #mafate {
   position:relative;
   display:block;
-  margin:10px;
+  margin: 0px;
+  padding-left : 100px;
+  padding-top : 100px;
   width : 100%;
   height : 500px;
-  /*background : rgba(0,255,0,0.25);*/
+  background : #82b8c8;
 }
 
 #echelles {
   position:absolute;
   padding : 25px;
   margin : 0;
+  width : 500px;
   top : 5px;
   right: 5px;
   background : rgba(0,0,255,0.25);
@@ -115,6 +156,11 @@ html {
   background: url(images/unite.jpg) repeat-y;
 }
 
+#echelles .echelle {
+  display : inline-block;
+
+}
+
 .via .echelle {
   position: absolute;
   left:0px;
@@ -134,7 +180,7 @@ html {
   position : absolute;
   bottom:0;
   width : 100%;
-  background : brown;
+  background : #53d975;
   border : solid black 2px;
   border-radius: 25px 25px 0px 0px;
 }
@@ -178,6 +224,7 @@ a#solution {
   color : white;
 }
 
+.ui-dialog-titlebar-close { width: 30px !important; height: 30px !important; top: 40% !important }
 
 /* ==========================================================================
    Media Queries

@@ -1,13 +1,12 @@
 Array::shuffle ?= ->
   if @length > 1 then for i in [@length-1..1]
-    j = Math.floor Math.random() * (i + 1)
+    j = Math.floor( Math.random() * (i + 1) )
     [@[i], @[j]] = [@[j], @[i]]
   this
 
 ID = 1
 SOLUTION = [1,2,10,3,9,4,8,5]
-ILETS = SOLUTION.slice(0)
-ILETS.shuffle()
+ILETS = SOLUTION.slice(0).shuffle()
 ECHELLES = [1,3,4,5,6,7,8]
 
 class Ilet
@@ -30,7 +29,10 @@ class Echelle
     """
   
 $ ->
-  $( "#parametres" ).dialog(width : '400px')
+  $( "#parametres" ).dialog
+    width : '800px'
+    position: {my: 'center bottom', at: 'center bottom', of: window}
+    
   $( "#param_button" )
     .button()
     .on "click", -> $( "#parametres" ).dialog( "open" )
@@ -51,9 +53,7 @@ $ ->
           .css
             'height': "#{height}0%"
             'bottom': bottom
-            'bottom': bottom
-          .show()
-            
+          .show()    
         if via.find( ".echelle" ).length > 0
           scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
           console.log scale,height
@@ -61,12 +61,15 @@ $ ->
             via.find( ".echelle" ).addClass "shine-right"
           else via.find( ".echelle" ).addClass "shine-wrong" 
       else
-        via.find( ".echelle" ).appendTo( "#echelles" )
+        scale = via.find( ".echelle" )
+        scale.appendTo( "#echelles" )
+        scale.css position: "relative"
         via.hide()
-    
     bleues = $( ".shine-right" ).length
     scales = $( ".echelle" ).length
-    alert "gagné !" if bleues is scales
+    if bleues is scales
+      $( "#echelles" ).append "<div id='gagne'>Oté, c'est gagné !</div>"
+      $( "body" ).fireworks()
      
   draw = ->
     $( "#mafate, #echelles" ).empty()
@@ -83,15 +86,21 @@ $ ->
     $( "#mafate" ).sortable
       stop: -> checkit()
      
-    $( "#echelles" ).draggable()
-    $( ".echelle" ).draggable()
+    $( "#echelles" ).draggable
+      containment: "body"
+    $( ".echelle" ).draggable
+      revert : true
     
     $( ".via" ).droppable
       tolerance : 'touch'        
       accept    : '.echelle'    
       activeClass : "shine-yellow"
       hoverClass  : "shine-white"
-      drop: ( event, ui ) ->   
+      drop: ( event, ui ) ->
+        current_scale = $( this ).find( ".echelle" )
+        if current_scale.length
+          $( "#echelles"  ).append current_scale
+          current_scale.css position: "relative"
         $(this).append ui.draggable
         ui.draggable.css
           position: 'absolute'
@@ -102,18 +111,15 @@ $ ->
      
   go = ->
     n = parseInt $( "#amount-slider" ).html()
-    ECHELLES = []
-    ILETS = [ Math.floor(Math.random() * 10) + 1 ]
+    [ECHELLES, ILETS] = [ [], [ Math.floor(Math.random() * 10) + 1 ] ]
     [lop, k] = [true, 0]
-    k = 0
     while (lop and (k<1000))
-      lop = false
-      k++
+      [lop, k] = [false, k+1]
       for i in [0..n-2]
         e = []
         for j in [-10..10]
           c = ILETS[i] + j
-          if not (j is 0 or Math.abs(j) in ECHELLES or c not in [1..10] or c in ILETS )
+          if not ( (j is 0) or (Math.abs(j) in ECHELLES) or (c not in [1..10]) or (c in ILETS) )
             e.push j
         if e.length
           elu = (e.shuffle())[0]
@@ -122,14 +128,14 @@ $ ->
           ILETS.push( ilet )
         else
           lop = true
-          break
-        
+          break       
     SOLUTION = ILETS.slice(0)
     ILETS.shuffle()
     ECHELLES.shuffle()
     draw()
     checkit()
-        
+  
+  $( "#amount-slider" ).html("7")         
   $( "#slider" ).slider
     range: "max"
     min   : 2
@@ -139,12 +145,13 @@ $ ->
     slide : ( event, ui ) -> 
       $( "#amount-slider" ).html( ui.value )
       go()
-        
-  $( "#amount-slider" ).html("7")    
-  
+   
   $( "#random" )
     .button()
-    .on "click", -> go()
+    .on "click", -> 
+      $( "#gagne" ).remove()
+      $( "body" ).fireworks( "destroy" )
+      go()
   
   $( "#solution" )
     .button()
@@ -153,6 +160,5 @@ $ ->
       draw()
       checkit()
  
-  draw()
-  checkit()
+  $( "#random" ).trigger "click"
 

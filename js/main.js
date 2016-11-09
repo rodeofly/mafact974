@@ -20,9 +20,7 @@
 
   SOLUTION = [1, 2, 10, 3, 9, 4, 8, 5];
 
-  ILETS = SOLUTION.slice(0);
-
-  ILETS.shuffle();
+  ILETS = SOLUTION.slice(0).shuffle();
 
   ECHELLES = [1, 3, 4, 5, 6, 7, 8];
 
@@ -49,7 +47,12 @@
   $(function() {
     var checkit, draw, go;
     $("#parametres").dialog({
-      width: '400px'
+      width: '800px',
+      position: {
+        my: 'center bottom',
+        at: 'center bottom',
+        of: window
+      }
     });
     $("#param_button").button().on("click", function() {
       return $("#parametres").dialog("open");
@@ -69,7 +72,6 @@
           bottom = (deniv > 0 ? next_alt : curr_alt) + "0%";
           via.attr("data-denivelle", deniv).css({
             'height': height + "0%",
-            'bottom': bottom,
             'bottom': bottom
           }).show();
           if (via.find(".echelle").length > 0) {
@@ -82,14 +84,19 @@
             }
           }
         } else {
-          via.find(".echelle").appendTo("#echelles");
+          scale = via.find(".echelle");
+          scale.appendTo("#echelles");
+          scale.css({
+            position: "relative"
+          });
           return via.hide();
         }
       });
       bleues = $(".shine-right").length;
       scales = $(".echelle").length;
       if (bleues === scales) {
-        return alert("gagné !");
+        $("#echelles").append("<div id='gagne'>Oté, c'est gagné !</div>");
+        return $("body").fireworks();
       }
     };
     draw = function() {
@@ -116,14 +123,26 @@
           return checkit();
         }
       });
-      $("#echelles").draggable();
-      $(".echelle").draggable();
+      $("#echelles").draggable({
+        containment: "body"
+      });
+      $(".echelle").draggable({
+        revert: true
+      });
       return $(".via").droppable({
         tolerance: 'touch',
         accept: '.echelle',
         activeClass: "shine-yellow",
         hoverClass: "shine-white",
         drop: function(event, ui) {
+          var current_scale;
+          current_scale = $(this).find(".echelle");
+          if (current_scale.length) {
+            $("#echelles").append(current_scale);
+            current_scale.css({
+              position: "relative"
+            });
+          }
           $(this).append(ui.draggable);
           ui.draggable.css({
             position: 'absolute',
@@ -136,20 +155,17 @@
       });
     };
     go = function() {
-      var c, e, elu, i, ilet, j, k, l, lop, m, n, ref, ref1, ref2;
+      var c, e, elu, i, ilet, j, k, l, lop, m, n, ref, ref1, ref2, ref3, ref4;
       n = parseInt($("#amount-slider").html());
-      ECHELLES = [];
-      ILETS = [Math.floor(Math.random() * 10) + 1];
-      ref = [true, 0], lop = ref[0], k = ref[1];
-      k = 0;
+      ref = [[], [Math.floor(Math.random() * 10) + 1]], ECHELLES = ref[0], ILETS = ref[1];
+      ref1 = [true, 0], lop = ref1[0], k = ref1[1];
       while (lop && (k < 1000)) {
-        lop = false;
-        k++;
-        for (i = l = 0, ref1 = n - 2; 0 <= ref1 ? l <= ref1 : l >= ref1; i = 0 <= ref1 ? ++l : --l) {
+        ref2 = [false, k + 1], lop = ref2[0], k = ref2[1];
+        for (i = l = 0, ref3 = n - 2; 0 <= ref3 ? l <= ref3 : l >= ref3; i = 0 <= ref3 ? ++l : --l) {
           e = [];
           for (j = m = -10; m <= 10; j = ++m) {
             c = ILETS[i] + j;
-            if (!(j === 0 || (ref2 = Math.abs(j), indexOf.call(ECHELLES, ref2) >= 0) || indexOf.call([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], c) < 0 || indexOf.call(ILETS, c) >= 0)) {
+            if (!((j === 0) || (ref4 = Math.abs(j), indexOf.call(ECHELLES, ref4) >= 0) || (indexOf.call([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], c) < 0) || (indexOf.call(ILETS, c) >= 0))) {
               e.push(j);
             }
           }
@@ -170,6 +186,7 @@
       draw();
       return checkit();
     };
+    $("#amount-slider").html("7");
     $("#slider").slider({
       range: "max",
       min: 2,
@@ -181,8 +198,9 @@
         return go();
       }
     });
-    $("#amount-slider").html("7");
     $("#random").button().on("click", function() {
+      $("#gagne").remove();
+      $("body").fireworks("destroy");
       return go();
     });
     $("#solution").button().on("click", function() {
@@ -190,8 +208,7 @@
       draw();
       return checkit();
     });
-    draw();
-    return checkit();
+    return $("#random").trigger("click");
   });
 
 }).call(this);
