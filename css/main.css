@@ -57,7 +57,7 @@ textarea {
    ========================================================================== */
 html { 
   /*background: url(images/trois_cirques.jpg) no-repeat center center fixed;*/
-  background : #ae7657;
+  background : #3d45c4;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -77,27 +77,7 @@ html {
   color: #fff;
   font-family: Monoton;
   font-size : 4em;
-  -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
-  -moz-animation: neon1 1.5s ease-in-out infinite alternate;
-  animation: neon1 1.5s ease-in-out infinite alternate;
-}
-
-
-@-webkit-keyframes neon1 {
-  from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
-  }
-  to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
-  }
-}
-@-moz-keyframes neon1 {
-  from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
-  }
-  to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
-  }
+ 
 }
 
 
@@ -120,7 +100,7 @@ html {
 }
 
 #mafate {
-  position:relative;
+  position:absolute;
   display:block;
   margin: 0px;
   padding-left : 100px;
@@ -130,6 +110,49 @@ html {
   background : #82b8c8;
 }
 
+.spot {
+  position : relative;
+  display : inline-block;
+  height : 100%;
+  width : 150px;
+  margin : 2px;
+  padding:0;
+}
+
+
+
+.ilet {
+  position : absolute;
+  bottom:0;
+  width : 100%;
+  background: url(images/strate.png) repeat;
+  border : solid black 2px;
+  border-radius: 25px 25px 0px 0px;
+}
+
+.spot:first-of-type .ilet, .spot:last-of-type .ilet {
+
+  background: url(images/strateB.png) repeat;
+}
+
+.via {
+  position : absolute;
+  margin:0;
+  padding:0;
+  right: -20px;
+  width : 40px;
+  border : dashed black 5px;
+  background : transparent;
+  min-height: 10%;
+  border-radius: 25px 25px 0px 0px;
+  z-index:2;
+}
+
+.via:not(:empty) {
+
+    border : none;
+}
+
 #echelles {
   position:absolute;
   padding : 25px;
@@ -137,67 +160,27 @@ html {
   width : 500px;
   top : 5px;
   right: 5px;
-  background : rgba(0,0,255,0.25);
-  border-radius: 50px;
-  border: solid black 5px;
   z-index:5;
+  background: url(images/nuage.png) no-repeat; 
+  background-size: 100% 100%;
 
-}
-
-.echelle {
-  display:inline-block;
-  position:relative;
-  bottom : 0;
-  width : 50px;
-  background : red;
-  border : solid black 1px;
-  z-index:5;
-  border-radius: 25px 25px 0px 0px;
-  background: url(images/unite.jpg) repeat-y;
 }
 
 #echelles .echelle {
-  display : inline-block;
-
+  display:inline-block;
+  position : relative !important;
+  width : 50px;
+  z-index:5;
+  background: url(images/unite.png) repeat-y;
 }
 
 .via .echelle {
-  position: absolute;
-  left:0px;
-  bottom:0px !important;
+  position : absolute !important;
+  bottom : 0 !important;
+  width : 50px;
+  z-index:50;
+  background: url(images/unite.png) repeat-y;
 }
-
-.spot {
-  position : relative;
-  display : inline-block;
-  height : 100%;
-  width : 100px;
-  margin : 2px;
-  padding:0;
-}
-
-.ilet {
-  position : absolute;
-  bottom:0;
-  width : 100%;
-  background : #53d975;
-  border : solid black 2px;
-  border-radius: 25px 25px 0px 0px;
-}
-
-.via {
-  position : absolute;
-  margin:0;
-  padding:0;
-  right: 0;
-  width : 40px;
-  border : solid black 5px;
-  background : white;
-  min-height: 10%;
-  border-radius: 25px 25px 0px 0px;
-  z-index:2;
-}
-
 .info {
   position:absolute;
   margin :auto;
@@ -207,19 +190,23 @@ html {
   font-weight : bolder;
 }
 
+.echelle .info {
+  top : 10px;
+  left : 15px;
+  font-size : 2em;
+  color : grey;
+}
+
 .ilet .info {
   font-size : 3em;
+  margin :auto 40%;
 }
-.echelle .info {
-  font-size : 2em;
-  background : rgba(255,255,255,0.5);
-}
+
 
 .shine-yellow { box-shadow : 0px 0px 5px 5px yellow  !important; }
 .shine-white  { box-shadow : 0px 0px 5px 5px white !important; }
 .shine-wrong  { box-shadow : 0px 0px 5px 5px red !important; }
-.shine-right  { box-shadow : 0px 0px 5px 5px blue !important; }
-
+/*.shine-right  { box-shadow : 0px 0px 5px 5px blue !important;*/
 a#solution {
   color : white;
 }

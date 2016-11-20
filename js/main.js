@@ -71,24 +71,20 @@
           height = Math.abs(deniv);
           bottom = (deniv > 0 ? next_alt : curr_alt) + "0%";
           via.attr("data-denivelle", deniv).css({
-            'height': height + "0%",
-            'bottom': bottom
-          }).show();
+            height: height + "0%",
+            bottom: "" + bottom
+          });
           if (via.find(".echelle").length > 0) {
             scale = parseInt(via.find(".echelle").attr("data-hauteur"));
-            console.log(scale, height);
             if (scale === height) {
               return via.find(".echelle").addClass("shine-right");
             } else {
-              return via.find(".echelle").addClass("shine-wrong");
+              return via.find(".echelle").appendTo($("#echelles"));
             }
           }
         } else {
           scale = via.find(".echelle");
           scale.appendTo("#echelles");
-          scale.css({
-            position: "relative"
-          });
           return via.hide();
         }
       });
@@ -107,7 +103,7 @@
         ilet = new Ilet(i);
         $("#mafate").append(ilet.html);
         $(".ilet[data-altitude='" + ilet.altitude + "']").css({
-          'height': (50 * i) + "px"
+          height: (50 * i) + "px"
         });
       }
       for (m = 0, len1 = ECHELLES.length; m < len1; m++) {
@@ -115,10 +111,11 @@
         echelle = new Echelle(i);
         $("#echelles").append(echelle.html);
         $(".echelle[data-hauteur='" + echelle.hauteur + "']").css({
-          'height': (50 * i) + "px"
+          height: (50 * i) + "px"
         });
       }
       $("#mafate").sortable({
+        items: '.spot:not(:first, :last)',
         stop: function() {
           return checkit();
         }
@@ -135,22 +132,22 @@
         activeClass: "shine-yellow",
         hoverClass: "shine-white",
         drop: function(event, ui) {
-          var current_scale;
+          var current_scale, scaleHeight, viaHeight;
+          viaHeight = Math.abs(parseInt($(this).attr("data-denivelle")));
+          scaleHeight = parseInt(ui.draggable.attr("data-hauteur"));
           current_scale = $(this).find(".echelle");
-          if (current_scale.length) {
-            $("#echelles").append(current_scale);
-            current_scale.css({
-              position: "relative"
+          if (viaHeight === scaleHeight) {
+            if (current_scale.length) {
+              $("#echelles").append(current_scale);
+            }
+            $(this).append($(ui.draggable));
+            $(this).find(".echelle").css({
+              position: "absolute",
+              left: "0",
+              top: "0"
             });
+            return checkit();
           }
-          $(this).append(ui.draggable);
-          ui.draggable.css({
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            top: ''
-          });
-          return checkit();
         }
       });
     };

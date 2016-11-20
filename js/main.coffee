@@ -48,22 +48,17 @@ $ ->
         deniv = curr_alt - next_alt
         height = Math.abs(deniv)
         bottom = "#{if (deniv > 0) then next_alt else curr_alt}0%"
-        via
-          .attr "data-denivelle", deniv
-          .css
-            'height': "#{height}0%"
-            'bottom': bottom
-          .show()    
+        via.attr("data-denivelle", deniv).css
+          height: "#{height}0%"
+          bottom: "#{bottom}"
         if via.find( ".echelle" ).length > 0
           scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
-          console.log scale,height
           if scale is height
             via.find( ".echelle" ).addClass "shine-right"
-          else via.find( ".echelle" ).addClass "shine-wrong" 
+          else via.find( ".echelle" ).appendTo $( "#echelles"  ) 
       else
         scale = via.find( ".echelle" )
         scale.appendTo( "#echelles" )
-        scale.css position: "relative"
         via.hide()
     bleues = $( ".shine-right" ).length
     scales = $( ".echelle" ).length
@@ -76,14 +71,17 @@ $ ->
     for i in ILETS
       ilet = new Ilet(i)
       $( "#mafate" ).append ilet.html
-      $( ".ilet[data-altitude='#{ilet.altitude}']" ).css 'height': "#{50*i}px"
+      $( ".ilet[data-altitude='#{ilet.altitude}']" ).css height: "#{50*i}px"
       
     for i in ECHELLES
       echelle = new Echelle(i)
       $( "#echelles" ).append echelle.html
-      $( ".echelle[data-hauteur='#{echelle.hauteur}']" ).css 'height': "#{50*i}px" 
+      $( ".echelle[data-hauteur='#{echelle.hauteur}']" ).css height: "#{50*i}px" 
+    
+  
     
     $( "#mafate" ).sortable
+      items: '.spot:not(:first, :last)'
       stop: -> checkit()
      
     $( "#echelles" ).draggable
@@ -97,17 +95,20 @@ $ ->
       activeClass : "shine-yellow"
       hoverClass  : "shine-white"
       drop: ( event, ui ) ->
+        viaHeight = Math.abs parseInt($(this).attr "data-denivelle")
+        scaleHeight = parseInt(ui.draggable.attr "data-hauteur")
         current_scale = $( this ).find( ".echelle" )
-        if current_scale.length
-          $( "#echelles"  ).append current_scale
-          current_scale.css position: "relative"
-        $(this).append ui.draggable
-        ui.draggable.css
-          position: 'absolute'
-          left : 0
-          bottom : 0
-          top: ''
-        checkit()
+        if viaHeight is scaleHeight
+          $( "#echelles"  ).append current_scale if current_scale.length    
+          $(this).append( $(ui.draggable) )
+          $(this).find(".echelle").css
+            position : "absolute"
+            left:"0"
+            top:"0"
+
+          checkit()
+        
+       
      
   go = ->
     n = parseInt $( "#amount-slider" ).html()
