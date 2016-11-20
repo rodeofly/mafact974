@@ -117,7 +117,7 @@ $ ->
     [lop, k] = [true, 0]
     while (lop and (k<1000))
       [lop, k] = [false, k+1]
-      for i in [0..n-2]
+      for i in [0..n-1]
         e = []
         for j in [-10..10]
           c = ILETS[i] + j
@@ -145,9 +145,9 @@ $ ->
   $( "#slider" ).slider
     range: "max"
     min   : 2
-    max   : 8
+    max   : 7
     step  : 1
-    value : 7
+    value : 6
     slide : ( event, ui ) ->
       $( "#gagne" ).remove()
       $( "#mafate" ).fireworks( 'destroy' )

@@ -161,7 +161,7 @@
       ref1 = [true, 0], lop = ref1[0], k = ref1[1];
       while (lop && (k < 1000)) {
         ref2 = [false, k + 1], lop = ref2[0], k = ref2[1];
-        for (i = m = 0, ref3 = n - 2; 0 <= ref3 ? m <= ref3 : m >= ref3; i = 0 <= ref3 ? ++m : --m) {
+        for (i = m = 0, ref3 = n - 1; 0 <= ref3 ? m <= ref3 : m >= ref3; i = 0 <= ref3 ? ++m : --m) {
           e = [];
           for (j = o = -10; o <= 10; j = ++o) {
             c = ILETS[i] + j;
@@ -194,9 +194,9 @@
     $("#slider").slider({
       range: "max",
       min: 2,
-      max: 8,
+      max: 7,
       step: 1,
-      value: 7,
+      value: 6,
       slide: function(event, ui) {
         var n;
         $("#gagne").remove();
