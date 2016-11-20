@@ -55,7 +55,7 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-html { 
+html {
   /*background: url(images/trois_cirques.jpg) no-repeat center center fixed;*/
   background : #3d45c4;
   -webkit-background-size: cover;
@@ -87,13 +87,29 @@ html {
   padding :0;
 }
 
+#sliderInfo {
+    display : inline;
+    margin : 0;
+    padding: 0;
+}
 #slider {
+
   width : 100%;
+}
+#parametres {
+  position : absolute;
+  padding : 50px;
+  border : solid black 5px;
+  border-radius : 20px;
+  top  : 35%;
+  left : 35%;
+  z-index : 10000;
+  background: rgba(255,255,255,1);
 }
 
 #param_button {
   position : absolute;
-  top:0;
+  top  : 0;
   left : 0;
   z-index : 10000;
 
@@ -211,7 +227,7 @@ a#solution {
   color : white;
 }
 
-.ui-dialog-titlebar-close { width: 30px !important; height: 30px !important; top: 40% !important }
+#close { position:absolute; width: 25px; height: 25px; top: 5px; right : 5px; }
 
 /* ==========================================================================
    Media Queries

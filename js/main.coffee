@@ -5,13 +5,14 @@ Array::shuffle ?= ->
   this
 
 ID = 1
-SOLUTION = [1,2,10,3,9,4,8,5] 
-ILETS = SOLUTION.slice(0)
-first = ILETS.shift()
-last = ILETS.pop()
-ILETS.shuffle()
-ILETS = [first].concat( ILETS ).concat [last]
-ECHELLES = [1,3,4,5,6,7,8]
+SOLUTION = [] 
+ILETS = []
+ECHELLES = []
+
+CHALLENGES =
+  7:
+    "ilets": [1,2,10,3,9,4,8,5]
+    "echelles": [1,3,4,5,6,7,8]
 
 class Ilet
   constructor: (@altitude) ->
@@ -33,13 +34,13 @@ class Echelle
     """
   
 $ ->
-  $( "#parametres" ).dialog
-    width : '800px'
-    position: {my: 'center bottom', at: 'center bottom', of: window}
-    
-  $( "#param_button" )
-    .button()
-    .on "click", -> $( "#parametres" ).dialog( "open" )
+  
+  html = "<div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='close'>X</div>"
+  html += "<div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br><h2>Challenges</h2>"
+  html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [7..7]
+  $( "#parametres" ).append html
+  $( "#parametres" ).draggable()
+  $( "#param_button" ).button().on "click", -> $( "#parametres" ).toggle()
     
   checkit = -> 
     $( ".echelle" ).removeClass( "shine-right shine-wrong" )
@@ -88,8 +89,7 @@ $ ->
       items: '.spot:not(:first, :last)'
       stop: -> checkit()
      
-    $( "#echelles" ).draggable
-      containment: "body"
+    $( "#echelles" ).draggable()
     $( ".echelle" ).draggable
       revert : true
     
@@ -111,11 +111,8 @@ $ ->
             top:"0"
 
           checkit()
-        
-       
-     
-  go = ->
-    n = parseInt $( "#amount-slider" ).html()
+            
+  random = (n) ->
     [ECHELLES, ILETS] = [ [], [ Math.floor(Math.random() * 10) + 1 ] ]
     [lop, k] = [true, 0]
     while (lop and (k<1000))
@@ -151,27 +148,44 @@ $ ->
     max   : 8
     step  : 1
     value : 7
-    slide : ( event, ui ) -> 
-      $( "#amount-slider" ).html( ui.value )
-      go()
-   
-  $( "#random" )
-    .button()
-    .on "click", -> 
+    slide : ( event, ui ) ->
       $( "#gagne" ).remove()
-      $( "body" ).fireworks( "destroy" )
-      go()
-  
-  $( "#solution" )
+      $( "#mafate" ).fireworks( 'destroy' )
+      $( "#amount-slider" ).html( ui.value )
+      random(n = parseInt $( "#amount-slider" ).html() )
+   
+  $( ".level" )
     .button()
     .on "click", ->
-      ILETS = SOLUTION
+      $( "#parametres" ).hide()
+      level = parseInt $(this).attr( "data-level" )
+      $( "#gagne" ).remove()
+      $( "#mafate" ).fireworks( 'destroy' )
+      SOLUTION = CHALLENGES[level].ilets
+      ECHELLES = CHALLENGES[level].echelles.shuffle()
+      ILETS = SOLUTION.slice(0)
+      [first, last] = [ILETS.shift(), ILETS.pop()]
+      ILETS = [first].concat( ILETS.shuffle() ).concat [last]
+      SOLUTION = []
       draw()
       checkit()
   
-  $( "#close" )
+  $( "#close" ).button().on "click", -> $( "#parametres" ).hide()
+      
+  $( "#random" ).button()
+    .on "click", ->
+      $( "#gagne" ).remove()
+      $( "#mafate" ).fireworks( 'destroy' )
+      random( n = parseInt $( "#amount-slider" ).html() )
+      
+  $( "#solution" )
     .button()
     .on "click", ->
-      $( "#parametres" ).dialog "close"
+      ILETS = SOLUTION if SOLUTION.length > 0
+      draw()
+      checkit()
+  
   $( "#random" ).trigger "click"
+  
+  
 
