@@ -34,6 +34,34 @@ class Echelle
     """
   
 $ ->
+  mini = (echelle) ->
+    h = echelle.attr "data-hauteur"
+    echelle.css
+      position: "relative"
+      height: "#{25*h}px"
+      width: "25px"
+      backgroundSize: "100% 100%"
+      background: "url(css/images/uniteS.png) repeat-y"
+    echelle.find( ".info" ).css
+      top : "5px"
+      left : "8px"
+      fontSize : "1em"
+      color : "black"
+   
+  maxi = (echelle) ->
+    h = echelle.attr "data-hauteur"
+    echelle.css 
+      position : "absolute"
+      height: "#{50*h}px"
+      width: "50px"
+      backgroundSize: "100% 100%"
+      background: "url(css/images/unite.png) repeat-y"
+    echelle.find( ".info" ).css
+      top : "10px"
+      left : "15px"
+      fontSize : "2em"
+      color : "grey"
+  
   
   html = "<div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='close'>X</div>"
   html += "<div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br><h2>Challenges</h2>"
@@ -60,10 +88,10 @@ $ ->
           scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
           if scale is height
             via.find( ".echelle" ).addClass "shine-right"
-          else via.find( ".echelle" ).appendTo $( "#echelles"  ) 
+          else 
+            current_scale = via.find( ".echelle" ).appendTo $( "#echelles"  )
+            mini(current_scale)
       else
-        scale = via.find( ".echelle" )
-        scale.appendTo( "#echelles" )
         via.hide()
     bleues = $( ".shine-right" ).length
     scales = $( ".echelle" ).length
@@ -81,7 +109,8 @@ $ ->
     for i in ECHELLES
       echelle = new Echelle(i)
       $( "#echelles" ).append echelle.html
-      $( ".echelle[data-hauteur='#{echelle.hauteur}']" ).css height: "#{50*i}px" 
+      echelle = $( ".echelle[data-hauteur='#{echelle.hauteur}']" )
+      mini echelle
     
   
     
@@ -91,27 +120,42 @@ $ ->
      
     $( "#echelles" ).draggable()
     $( ".echelle" ).draggable
-      revert : true
-    
+      helper: "clone"
+      appendTo: "body"
+      revert: (valid_drop) ->
+        if not valid_drop
+          if $(this).parent().is "#echelles"
+            mini $(this) 
+        else true         
+      start : (event, ui) -> 
+        ui.helper.css('z-index', "10")
+        maxi ui.helper
+
+
+   
     $( ".via" ).droppable
       tolerance : 'touch'        
       accept    : '.echelle'    
       activeClass : "shine-yellow"
       hoverClass  : "shine-white"
       drop: ( event, ui ) ->
+        ui.helper.remove()
         viaHeight = Math.abs parseInt($(this).attr "data-denivelle")
         scaleHeight = parseInt(ui.draggable.attr "data-hauteur")
         current_scale = $( this ).find( ".echelle" )
         if viaHeight is scaleHeight
-          $( "#echelles"  ).append current_scale if current_scale.length    
-          $(this).append( $(ui.draggable) )
-          $(this).find(".echelle").css
-            position : "absolute"
-            left:"0"
-            top:"0"
-
+          $(this).append ui.draggable
+          maxi ui.draggable
+          if current_scale.length
+            $( "#echelles"  ).append current_scale
+            mini current_scale       
           checkit()
-            
+        else
+          ui.draggable.draggable 'option','revert', -> 
+            if $(this).parent().is( "#echelles" )
+              mini $(this)
+            return true
+         
   random = (n) ->
     [ECHELLES, ILETS] = [ [], [ Math.floor(Math.random() * 10) + 1 ] ]
     [lop, k] = [true, 0]
@@ -186,6 +230,7 @@ $ ->
       checkit()
   
   $( "#random" ).trigger "click"
+  $( "#param_button" ).trigger "click"
   
   
 

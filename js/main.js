@@ -52,7 +52,41 @@
   })();
 
   $(function() {
-    var checkit, draw, html, i, l, random;
+    var checkit, draw, html, i, l, maxi, mini, random;
+    mini = function(echelle) {
+      var h;
+      h = echelle.attr("data-hauteur");
+      echelle.css({
+        position: "relative",
+        height: (25 * h) + "px",
+        width: "25px",
+        backgroundSize: "100% 100%",
+        background: "url(css/images/uniteS.png) repeat-y"
+      });
+      return echelle.find(".info").css({
+        top: "5px",
+        left: "8px",
+        fontSize: "1em",
+        color: "black"
+      });
+    };
+    maxi = function(echelle) {
+      var h;
+      h = echelle.attr("data-hauteur");
+      echelle.css({
+        position: "absolute",
+        height: (50 * h) + "px",
+        width: "50px",
+        backgroundSize: "100% 100%",
+        background: "url(css/images/unite.png) repeat-y"
+      });
+      return echelle.find(".info").css({
+        top: "10px",
+        left: "15px",
+        fontSize: "2em",
+        color: "grey"
+      });
+    };
     html = "<div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='close'>X</div>";
     html += "<div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br><h2>Challenges</h2>";
     for (i = l = 7; l <= 7; i = ++l) {
@@ -67,7 +101,7 @@
       var bleues, scales;
       $(".echelle").removeClass("shine-right shine-wrong");
       $(".spot").each(function() {
-        var $next_spot, bottom, curr_alt, deniv, height, next_alt, scale, via;
+        var $next_spot, bottom, curr_alt, current_scale, deniv, height, next_alt, scale, via;
         $next_spot = $(this).next(".spot");
         via = $(this).find(".via");
         if ($next_spot.length) {
@@ -85,12 +119,11 @@
             if (scale === height) {
               return via.find(".echelle").addClass("shine-right");
             } else {
-              return via.find(".echelle").appendTo($("#echelles"));
+              current_scale = via.find(".echelle").appendTo($("#echelles"));
+              return mini(current_scale);
             }
           }
         } else {
-          scale = via.find(".echelle");
-          scale.appendTo("#echelles");
           return via.hide();
         }
       });
@@ -116,9 +149,8 @@
         i = ECHELLES[o];
         echelle = new Echelle(i);
         $("#echelles").append(echelle.html);
-        $(".echelle[data-hauteur='" + echelle.hauteur + "']").css({
-          height: (50 * i) + "px"
-        });
+        echelle = $(".echelle[data-hauteur='" + echelle.hauteur + "']");
+        mini(echelle);
       }
       $("#mafate").sortable({
         items: '.spot:not(:first, :last)',
@@ -128,7 +160,21 @@
       });
       $("#echelles").draggable();
       $(".echelle").draggable({
-        revert: true
+        helper: "clone",
+        appendTo: "body",
+        revert: function(valid_drop) {
+          if (!valid_drop) {
+            if ($(this).parent().is("#echelles")) {
+              return mini($(this));
+            }
+          } else {
+            return true;
+          }
+        },
+        start: function(event, ui) {
+          ui.helper.css('z-index', "10");
+          return maxi(ui.helper);
+        }
       });
       return $(".via").droppable({
         tolerance: 'touch',
@@ -137,20 +183,25 @@
         hoverClass: "shine-white",
         drop: function(event, ui) {
           var current_scale, scaleHeight, viaHeight;
+          ui.helper.remove();
           viaHeight = Math.abs(parseInt($(this).attr("data-denivelle")));
           scaleHeight = parseInt(ui.draggable.attr("data-hauteur"));
           current_scale = $(this).find(".echelle");
           if (viaHeight === scaleHeight) {
+            $(this).append(ui.draggable);
+            maxi(ui.draggable);
             if (current_scale.length) {
               $("#echelles").append(current_scale);
+              mini(current_scale);
             }
-            $(this).append($(ui.draggable));
-            $(this).find(".echelle").css({
-              position: "absolute",
-              left: "0",
-              top: "0"
-            });
             return checkit();
+          } else {
+            return ui.draggable.draggable('option', 'revert', function() {
+              if ($(this).parent().is("#echelles")) {
+                mini($(this));
+              }
+              return true;
+            });
           }
         }
       });
@@ -236,7 +287,8 @@
       draw();
       return checkit();
     });
-    return $("#random").trigger("click");
+    $("#random").trigger("click");
+    return $("#param_button").trigger("click");
   });
 
 }).call(this);
