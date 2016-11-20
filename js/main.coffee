@@ -105,7 +105,17 @@ $ ->
       ilet = new Ilet(i)
       $( "#mafate" ).append ilet.html
       $( ".ilet[data-altitude='#{ilet.altitude}']" ).css height: "#{50*i}px"
+    
+    height = $( "#mafate .ilet:first" ).attr "data-altitude"
+    $( "#riveG" ).css 
+      backgroundSize: "100px #{height*50}px"
+      backgroundPosition: "bottom"
+    height = $( "#mafate .ilet:last" ).attr "data-altitude"
+    $( "#riveD" ).css
+      backgroundSize: "100px #{height*50}px"
+      backgroundPosition: "bottom"
       
+     
     for i in ECHELLES
       echelle = new Echelle(i)
       $( "#echelles" ).append echelle.html

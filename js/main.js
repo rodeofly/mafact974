@@ -135,7 +135,7 @@
       }
     };
     draw = function() {
-      var echelle, ilet, len, len1, m, o;
+      var echelle, height, ilet, len, len1, m, o;
       $("#mafate, #echelles").empty();
       for (m = 0, len = ILETS.length; m < len; m++) {
         i = ILETS[m];
@@ -145,6 +145,16 @@
           height: (50 * i) + "px"
         });
       }
+      height = $("#mafate .ilet:first").attr("data-altitude");
+      $("#riveG").css({
+        backgroundSize: "100px " + (height * 50) + "px",
+        backgroundPosition: "bottom"
+      });
+      height = $("#mafate .ilet:last").attr("data-altitude");
+      $("#riveD").css({
+        backgroundSize: "100px " + (height * 50) + "px",
+        backgroundPosition: "bottom"
+      });
       for (o = 0, len1 = ECHELLES.length; o < len1; o++) {
         i = ECHELLES[o];
         echelle = new Echelle(i);
