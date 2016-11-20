@@ -200,14 +200,14 @@ html {
   padding : 25px;
   margin : 0;
   width : 200px;
-  height : 210px;
+  height : 146px;
   top : 5px;
   right: 5px;
-  /*background: url(images/nuage.png) no-repeat;*/
-  border : solid black 5px;
+  background: url(images/nuage.png) no-repeat;
+  background-position: bottom;
+  /*border : solid black 5px;
   border-radius : 10px; 
-  background-color : rgba(255,255,255,0.5);
-  background-size: 100% 100%;
+  background-color : rgba(255,255,255,0.5);*/
   z-index:3;
 }
 
