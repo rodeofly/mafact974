@@ -5,8 +5,12 @@ Array::shuffle ?= ->
   this
 
 ID = 1
-SOLUTION = [1,2,10,3,9,4,8,5]
-ILETS = SOLUTION.slice(0).shuffle()
+SOLUTION = [1,2,10,3,9,4,8,5] 
+ILETS = SOLUTION.slice(0)
+first = ILETS.shift()
+last = ILETS.pop()
+ILETS.shuffle()
+ILETS = [first].concat( ILETS ).concat [last]
 ECHELLES = [1,3,4,5,6,7,8]
 
 class Ilet
@@ -64,7 +68,7 @@ $ ->
     scales = $( ".echelle" ).length
     if bleues is scales
       $( "#echelles" ).append "<div id='gagne'>Oté, c'est gagné !</div>"
-      $( "body" ).fireworks()
+      $( "#mafate" ).fireworks()
      
   draw = ->
     $( "#mafate, #echelles" ).empty()
@@ -131,7 +135,11 @@ $ ->
           lop = true
           break       
     SOLUTION = ILETS.slice(0)
+    ILETS = SOLUTION.slice(0)
+    first = ILETS.shift()
+    last = ILETS.pop()
     ILETS.shuffle()
+    ILETS = [first].concat( ILETS ).concat [last]
     ECHELLES.shuffle()
     draw()
     checkit()
