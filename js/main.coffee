@@ -8,6 +8,7 @@ ID = 1
 SOLUTION = [] 
 ILETS = []
 ECHELLES = []
+CURRENT_LEVEL = 0
 
 CHALLENGES =
   1:
@@ -107,10 +108,18 @@ $ ->
       color : "grey"
   
   
-  html = "<div id='close'>X</div><div id='levels'</div>"
+  html =  "<div id='close'>X</div><div id='levels'>"
   html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [1..16]
-  html += "<div class='more'>+</div></div>"
-  html += "<div id='more'><div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br></div>"
+  html += "<div class='more'>+</div>"
+  html += """
+  <div id='more'>
+      <div id='random'>Aléatoire</div>
+      <div id='solution'>Soluce</div>
+      <div id='sliderInfo'>Niveaux :
+          <span id='amount-slider'></span>
+          <div id='slider'></div>
+      </div>
+   </div></div>"""
   $( "#parametres" ).append html
   $( "#parametres" ).draggable()
   $( "#param_button" ).button().on "click", ->
@@ -147,6 +156,9 @@ $ ->
     if bleues is scales
       $( "#echelles" ).append "<div id='gagne'>Oté, c'est gagné !</div>"
       $( "#laReunion" ).fireworks()
+      $( ".echelle" ).draggable( "destroy" )
+      $( "#mafate" ).sortable( "destroy" )
+      $( ".level[data-level='#{CURRENT_LEVEL}']" ).addClass "green"
      
   draw = ->
     $( "#mafate, #echelles" ).empty()
@@ -286,6 +298,7 @@ $ ->
       [first, last] = [ILETS.shift(), ILETS.pop()]
       ILETS = [first].concat( ILETS.shuffle() ).concat [last]
       SOLUTION = []
+      CURRENT_LEVEL = level
       draw()
       checkit()
   

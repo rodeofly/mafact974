@@ -96,7 +96,6 @@ html {
     padding: 0;
 }
 #slider {
-
   width : 100%;
 }
 #parametres {
@@ -116,15 +115,22 @@ html {
 
 #levels {
   position : absolute;
-  width : 450px;
+  width : 500px;
   height : 100px;
   top : 400px;
-  right : 25px;
+  left : 150px;
   margin : auto;
   display:flex;
   justify-content: space-between;
   flex-flow: row wrap;
   align-content: stretch;
+}
+
+#more {
+  position : absolute;
+  top : 325px;
+  left : 250px
+
 }
 
 #param_button {
@@ -223,8 +229,8 @@ html {
   margin : 0;
   width : 200px;
   height : 146px;
-  top : 5px;
-  right: 5px;
+  top : 150px;
+  right: 150px;
   background: url(images/nuage.png) no-repeat;
   background-position: bottom;
   /*border : solid black 5px;
@@ -274,6 +280,13 @@ html {
 .shine-white  { box-shadow : 0px 0px 5px 5px white !important; }
 .shine-wrong  { box-shadow : 0px 0px 5px 5px red !important; }
 /*.shine-right  { box-shadow : 0px 0px 5px 5px blue !important;*/
+.green {
+  border: solid green 5px !important;
+  font-weight: 900 !important;
+  color: green !important;
+  
+}
+
 a#solution {
   color : white;
 }
