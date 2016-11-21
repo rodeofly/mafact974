@@ -56,10 +56,6 @@ textarea {
    Author's custom styles
    ========================================================================== */
 html {
-  background: url(images/facteur.png);
-  background: url(images/case.png);
-  background: url(images/unite.png);
-  background: url(images/uniteS.png);
   background : #3d45c4;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -197,10 +193,17 @@ html {
 }
 
 .spot:first-of-type .ilet, .spot:last-of-type .ilet {
-
   background: url(images/strateB.png) repeat;
 }
 
+.spot:first {
+  background: url(css/images/facteur.png) no-repeat;
+}
+
+.spot:last {
+  background: url(css/images/case.png) no-repeat;
+}
+      
 .via {
   position : absolute;
   margin:0;
@@ -240,6 +243,7 @@ html {
 #echelles .echelle {
   display:inline-block;
   position : relative !important;
+  background: url(css/images/uniteS.png) repeat-y;
   z-index:5;
 }
 
