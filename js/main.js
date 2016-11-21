@@ -143,21 +143,23 @@
         color: "grey"
       });
     };
-    html = "<div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='close'>X</div>";
-    html += "<div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br><h2>Challenges</h2>";
+    html = "<div id='close'>X</div><div id='levels'</div>";
     for (i = l = 1; l <= 16; i = ++l) {
       html += "<div class='level' data-level='" + i + "'>" + i + "</div>";
     }
+    html += "<div class='more'>+</div></div>";
+    html += "<div id='more'><div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br></div>";
     $("#parametres").append(html);
     $("#parametres").draggable();
     $("#param_button").button().on("click", function() {
+      $("#more").hide();
       return $("#parametres").toggle();
     });
     checkit = function() {
       var bleues, scales;
       $(".echelle").removeClass("shine-right shine-wrong");
       $(".spot").each(function() {
-        var $next_spot, bottom, curr_alt, current_scale, deniv, height, next_alt, scale, via;
+        var $next_spot, bottom, curr_alt, current_scale, deniv, height, next_alt, scale, via, x;
         $next_spot = $(this).next(".spot");
         via = $(this).find(".via");
         if ($next_spot.length) {
@@ -165,9 +167,10 @@
           next_alt = parseInt($next_spot.find(".ilet").attr("data-altitude"));
           deniv = curr_alt - next_alt;
           height = Math.abs(deniv);
-          bottom = (deniv > 0 ? next_alt : curr_alt) + "0%";
+          x = deniv > 0 ? next_alt : curr_alt;
+          bottom = (x * 50) + "px";
           via.attr("data-denivelle", deniv).css({
-            height: height + "0%",
+            height: (height * 50) + "px",
             bottom: "" + bottom
           });
           if (via.find(".echelle").length > 0) {
@@ -371,6 +374,9 @@
       }
       draw();
       return checkit();
+    });
+    $(".more").button().on("click", function() {
+      return $("#more").show();
     });
     $("#random").trigger("click");
     return $("#param_button").trigger("click");

@@ -107,12 +107,16 @@ $ ->
       color : "grey"
   
   
-  html = "<div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='close'>X</div>"
-  html += "<div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br><h2>Challenges</h2>"
+  html = "<div id='close'>X</div><div id='levels'</div>"
   html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [1..16]
+  html += "<div class='more'>+</div></div>"
+  html += "<div id='more'><div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br></div>"
   $( "#parametres" ).append html
   $( "#parametres" ).draggable()
-  $( "#param_button" ).button().on "click", -> $( "#parametres" ).toggle()
+  $( "#param_button" ).button().on "click", ->
+    $( "#more" ).hide()
+    $( "#parametres" ).toggle()
+    
     
   checkit = -> 
     $( ".echelle" ).removeClass( "shine-right shine-wrong" )
@@ -124,9 +128,10 @@ $ ->
         next_alt = parseInt $next_spot.find( ".ilet" ).attr( "data-altitude" )
         deniv = curr_alt - next_alt
         height = Math.abs(deniv)
-        bottom = "#{if (deniv > 0) then next_alt else curr_alt}0%"
+        x = if (deniv > 0) then next_alt else curr_alt
+        bottom = "#{x*50}px"
         via.attr("data-denivelle", deniv).css
-          height: "#{height}0%"
+          height: "#{height*50}px"
           bottom: "#{bottom}"
         if via.find( ".echelle" ).length > 0
           scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
@@ -298,6 +303,8 @@ $ ->
       ILETS = SOLUTION if SOLUTION.length > 0
       draw()
       checkit()
+  
+  $( ".more" ).button().on "click", -> $( "#more" ).show()
   
   $( "#random" ).trigger "click"
   $( "#param_button" ).trigger "click"
