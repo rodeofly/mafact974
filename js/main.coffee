@@ -10,9 +10,52 @@ ILETS = []
 ECHELLES = []
 
 CHALLENGES =
+  1:
+    "ilets": [1, 4, 3]
+    "echelles": [3, 1]
+  2:
+    "ilets": [1, 4, 3, 5]
+    "echelles": [3, 1, 2]
+  3:
+    "ilets": [3, 10, 1, 9]
+    "echelles": [7, 9, 8]
+  4:
+    "ilets": [1, 5, 2, 4, 3]
+    "echelles": [4, 3, 2, 1]
+  5:
+    "ilets": [1, 10, 4, 9, 2]
+    "echelles": [9, 6, 5, 7]
+  6:
+    "ilets": [1, 8, 2, 10, 5, 9]
+    "echelles": [7, 6, 8, 5, 4]
   7:
-    "ilets": [1,2,10,3,9,4,8,5]
-    "echelles": [1,3,4,5,6,7,8]
+    "ilets": [1, 2, 7, 3, 6, 4]
+    "echelles": [1, 5, 4, 3, 2]
+  8:
+    "ilets": [1, 2, 4, 10, 5, 9, 6]
+    "echelles": [1, 2, 6, 5, 4, 3]
+  9:
+    "ilets": [7, 10, 5, 1, 3, 2, 8]
+    "echelles": [3, 5, 4, 2, 1, 6]
+  10:
+    "ilets": [5, 8, 6, 7, 3, 10, 4, 9]
+    "echelles": [3, 2, 1, 4, 7, 6, 5]
+  12:
+    "ilets": [1, 2, 10, 3, 9, 4, 8, 5]
+    "echelles": [1, 8, 7, 6, 5, 4, 3]
+  13:
+    "ilets": [3, 9, 2, 10, 7, 6, 1, 5, 4]
+    "echelles": [6, 7, 8, 3, 1, 5, 4, 1]
+  14:
+    "ilets": [7, 6, 10, 5, 4, 1, 9, 2, 8]
+    "echelles": [1, 4, 5, 1, 3, 8, 7, 6]
+  15:
+    "ilets": [2, 9, 1, 10, 4, 7, 3, 8, 5, 6]
+    "echelles": [7, 8, 9, 6, 3, 4, 5, 3, 1]
+  16:
+    "ilets": [2, 9, 1, 10, 4, 6, 5, 7, 3, 8]
+    "echelles": [7, 8, 9, 6, 2, 1, 2, 4, 5]
+      
 
 class Ilet
   constructor: (@altitude) ->
@@ -34,6 +77,7 @@ class Echelle
     """
   
 $ ->
+  #reduire une echelle lorsqu'elle retourne sur le nuage
   mini = (echelle) ->
     h = echelle.attr "data-hauteur"
     echelle.css
@@ -47,7 +91,7 @@ $ ->
       left : "8px"
       fontSize : "1em"
       color : "black"
-   
+  #augmenter une echelle lorsqu'elle quitte le nuage 
   maxi = (echelle) ->
     h = echelle.attr "data-hauteur"
     echelle.css 
@@ -65,7 +109,7 @@ $ ->
   
   html = "<div id='random'>Aléatoire</div><div id='solution'>Soluce</div><div id='close'>X</div>"
   html += "<div id='sliderInfo'>Niveaux :<span id='amount-slider'></span><div id='slider'></div></div><br><h2>Challenges</h2>"
-  html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [7..7]
+  html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [1..16]
   $( "#parametres" ).append html
   $( "#parametres" ).draggable()
   $( "#param_button" ).button().on "click", -> $( "#parametres" ).toggle()
@@ -97,7 +141,7 @@ $ ->
     scales = $( ".echelle" ).length
     if bleues is scales
       $( "#echelles" ).append "<div id='gagne'>Oté, c'est gagné !</div>"
-      $( "#mafate" ).fireworks()
+      $( "#laReunion" ).fireworks()
      
   draw = ->
     $( "#mafate, #echelles" ).empty()
@@ -109,12 +153,21 @@ $ ->
     height = $( "#mafate .ilet:first" ).attr "data-altitude"
     $( "#riveG" ).css 
       backgroundSize: "100px #{height*50}px"
-      backgroundPosition: "bottom"
-    height = $( "#mafate .ilet:last" ).attr "data-altitude"
+      backgroundPosition: "bottom"   
+
+    h = $( ".spot:first" ).height()-height*50
+    $( ".spot:first" ).css  
+      background: "url(css/images/facteur.png) no-repeat"
+      backgroundPosition: "25px #{h-50}px"
+    
+    height = $( "#mafate .ilet:last" ).attr "data-altitude"  
+    h = $( ".spot:last" ).height()-height*50
+    $( ".spot:last" ).css  
+      background: "url(css/images/case.png) no-repeat"
+      backgroundPosition: "25px #{h-50}px"
     $( "#riveD" ).css
       backgroundSize: "100px #{height*50}px"
-      backgroundPosition: "bottom"
-      
+      backgroundPosition: "bottom"     
      
     for i in ECHELLES
       echelle = new Echelle(i)
@@ -122,11 +175,10 @@ $ ->
       echelle = $( ".echelle[data-hauteur='#{echelle.hauteur}']" )
       mini echelle
     
-  
-    
     $( "#mafate" ).sortable
       items: '.spot:not(:first, :last)'
       stop: -> checkit()
+      
      
     $( "#echelles" ).draggable()
     $( ".echelle" ).draggable
@@ -135,14 +187,22 @@ $ ->
       revert: (valid_drop) ->
         if not valid_drop
           if $(this).parent().is "#echelles"
-            mini $(this) 
-        else true         
+            mini $(this)
+        else true
       start : (event, ui) -> 
         ui.helper.css('z-index', "10")
         maxi ui.helper
 
 
-   
+    $( "#echelles, #mafate" ).droppable
+      tolerance : 'touch'        
+      accept    : '.echelle'    
+      drop: ( event, ui ) ->
+        ui.helper.remove()
+        $( "#echelles"  ).append ui.draggable
+        mini ui.draggable
+        
+    
     $( ".via" ).droppable
       tolerance : 'touch'        
       accept    : '.echelle'    
@@ -204,7 +264,7 @@ $ ->
     value : 6
     slide : ( event, ui ) ->
       $( "#gagne" ).remove()
-      $( "#mafate" ).fireworks( 'destroy' )
+      $( "#laReunion" ).fireworks( 'destroy' )
       $( "#amount-slider" ).html( ui.value )
       random(n = parseInt $( "#amount-slider" ).html() )
    
@@ -214,7 +274,7 @@ $ ->
       $( "#parametres" ).hide()
       level = parseInt $(this).attr( "data-level" )
       $( "#gagne" ).remove()
-      $( "#mafate" ).fireworks( 'destroy' )
+      $( "#laReunion" ).fireworks( 'destroy' )
       SOLUTION = CHALLENGES[level].ilets
       ECHELLES = CHALLENGES[level].echelles.shuffle()
       ILETS = SOLUTION.slice(0)
@@ -229,7 +289,7 @@ $ ->
   $( "#random" ).button()
     .on "click", ->
       $( "#gagne" ).remove()
-      $( "#mafate" ).fireworks( 'destroy' )
+      $( "#laReunion" ).fireworks( 'destroy' )
       random( n = parseInt $( "#amount-slider" ).html() )
       
   $( "#solution" )

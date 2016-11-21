@@ -191,11 +191,13 @@ html {
 }
 
 .via:not(:empty) {
-
-    border : none;
+  border : none;
 }
 
 #echelles {
+  display : flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
   position:absolute;
   padding : 25px;
   margin : 0;
@@ -219,10 +221,11 @@ html {
 
 .via .echelle {
   position : absolute !important;
-  bottom : 0 !important;
+  bottom : 0px !important;
   width : 50px;
   z-index:50;
   background: url(images/unite.png) repeat-y;
+  border-bottom : solid black 4px;
 }
 .info {
   position:absolute;
@@ -244,6 +247,7 @@ html {
   font-size : 3em;
   margin :auto 20%;
 }
+
 
 
 .shine-yellow { box-shadow : 0px 0px 5px 5px yellow  !important; }
