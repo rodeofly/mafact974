@@ -126,12 +126,7 @@ html {
   align-content: stretch;
 }
 
-#more {
-  position : absolute;
-  top : 325px;
-  left : 250px
 
-}
 
 #param_button {
   position : absolute;
