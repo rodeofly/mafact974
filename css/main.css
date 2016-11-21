@@ -56,7 +56,10 @@ textarea {
    Author's custom styles
    ========================================================================== */
 html {
-  /*background: url(images/trois_cirques.jpg) no-repeat center center fixed;*/
+  background: url(images/facteur.png);
+  background: url(images/case.png);
+  background: url(images/unite.png);
+  background: url(images/uniteS.png);
   background : #3d45c4;
   -webkit-background-size: cover;
   -moz-background-size: cover;
