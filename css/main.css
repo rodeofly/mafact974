@@ -197,11 +197,11 @@ html {
 }
 
 .spot:first {
-  background: url(css/images/facteur.png) no-repeat;
+  background: url(images/facteur.png) no-repeat;
 }
 
 .spot:last {
-  background: url(css/images/case.png) no-repeat;
+  background: url(images/case.png) no-repeat;
 }
       
 .via {
@@ -243,7 +243,7 @@ html {
 #echelles .echelle {
   display:inline-block;
   position : relative !important;
-  background: url(css/images/uniteS.png) repeat-y;
+  background: url(images/uniteS.png) repeat-y;
   z-index:5;
 }
 
