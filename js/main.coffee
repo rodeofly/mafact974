@@ -4,6 +4,9 @@ Array::shuffle ?= ->
     [@[i], @[j]] = [@[j], @[i]]
   this
 
+delay = (ms, func) -> setTimeout func, ms
+
+
 ID = 1
 SOLUTION = [] 
 ILETS = []
@@ -120,6 +123,7 @@ $ ->
           <div id='slider'></div>
       </div>
    </div></div>"""
+  
   $( "#parametres" ).append html
   $( "#parametres" ).draggable()
   $( "#param_button" ).button().on "click", ->
@@ -153,12 +157,59 @@ $ ->
         via.hide()
     bleues = $( ".shine-right" ).length
     scales = $( ".echelle" ).length
+    
+    delai = 100
+    climbAndJump = (c, i) ->
+      parent = $( "#facteur" ).parent()
+      if parent.hasClass "ilet"
+        via = parent.siblings ".via"
+        if via.find( ".echelle").length > 0 
+          d = parseInt via.attr( "data-denivelle" )
+          delay delai, -> 
+            via.find( ".echelle").append $( "#facteur")
+            i = Math.abs d 
+            if d>0
+              $( "#facteur" ).css
+                bottom: "auto"
+                top: "-50px"
+                left: "40%"
+              climbAndJump(1, i)
+            else
+              $( "#facteur" ).css
+                top:"auto"
+                bottom: "0px"
+                left: "40%"
+              climbAndJump(-1, i) 
+        else
+          if not $( "#facteur" ).closest( ".spot" ).is $( ".spot:last") 
+            console.log "done"
+      else
+        if i
+          i--
+          alt = parseInt $( "#facteur" ).css( "top" )
+          delay delai, -> 
+            $( "#facteur" ).css top: "#{alt+c*50}px"
+            climbAndJump(c, i)
+        else
+          spot = $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" )
+          delay delai, -> 
+            spot.append $( "#facteur" )
+            $( "#facteur" ).css
+              top: "-50px"
+              left: "40%"
+            climbAndJump(c, i)
+    climbAndJump()        
+    
     if bleues is scales
       $( "#echelles" ).append "<div id='gagne'>Oté, c'est gagné !</div>"
       $( "#laReunion" ).fireworks()
       $( ".echelle" ).draggable( "destroy" )
       $( "#mafate" ).sortable( "destroy" )
       $( ".level[data-level='#{CURRENT_LEVEL}']" ).addClass "green"
+      delay 5000, -> $( "#parametres" ).show()
+   
+      
+ 
      
   draw = ->
     $( "#mafate, #echelles" ).empty()
@@ -172,10 +223,11 @@ $ ->
       backgroundSize: "100px #{height*50}px"
       backgroundPosition: "bottom"   
 
-    h = $( ".spot:first" ).height()-height*50
-    $( ".spot:first" ).css  
-      background: "url(css/images/facteur.png) no-repeat"
-      backgroundPosition: "25px #{h-50}px"
+
+    $( ".spot:first .ilet" ).append "<div id='facteur'></div>"  
+    $( "#facteur" ).css
+      top: "-50px"
+      left: "40%"
     
     height = $( "#mafate .ilet:last" ).attr "data-altitude"  
     h = $( ".spot:last" ).height()-height*50
@@ -194,10 +246,12 @@ $ ->
     
     $( "#mafate" ).sortable
       items: '.spot:not(:first, :last)'
-      stop: -> checkit()
+      stop: -> 
+        $( ".spot:first .ilet" ).append $( "#facteur" )
+        checkit()
       
      
-    $( "#echelles" ).draggable()
+    $( "#echelles" ).draggable containment: "#laReunion"
     $( ".echelle" ).draggable
       helper: "clone"
       appendTo: "body"
