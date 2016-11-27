@@ -450,7 +450,7 @@
     $(".more").button().on("click", function() {
       return $("#more").show();
     });
-    $("#random").trigger("click");
+    $(".level[data-level='1']").trigger("click");
     return $("#param_button").trigger("click");
   });
 

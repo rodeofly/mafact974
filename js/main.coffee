@@ -373,7 +373,7 @@ $ ->
   
   $( ".more" ).button().on "click", -> $( "#more" ).show()
   
-  $( "#random" ).trigger "click"
+  $( ".level[data-level='1']" ).trigger "click"
   $( "#param_button" ).trigger "click"
   
   
