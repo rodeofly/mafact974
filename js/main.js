@@ -36,60 +36,60 @@
       "echelles": [3, 1]
     },
     2: {
-      "ilets": [1, 4, 3, 5],
-      "echelles": [3, 1, 2]
+      "ilets": [1, 3, 4, 5],
+      "echelles": [1, 2, 3]
     },
     3: {
-      "ilets": [3, 10, 1, 9],
-      "echelles": [7, 9, 8]
+      "ilets": [3, 1, 10, 9],
+      "echelles": [7, 8, 9]
     },
     4: {
-      "ilets": [1, 5, 2, 4, 3],
-      "echelles": [4, 3, 2, 1]
+      "ilets": [1, 2, 4, 5, 3],
+      "echelles": [1, 2, 3, 4]
     },
     5: {
-      "ilets": [1, 10, 4, 9, 2],
-      "echelles": [9, 6, 5, 7]
+      "ilets": [1, 4, 9, 10, 2],
+      "echelles": [5, 6, 7, 9]
     },
     6: {
-      "ilets": [1, 8, 2, 10, 5, 9],
-      "echelles": [7, 6, 8, 5, 4]
+      "ilets": [1, 2, 5, 8, 10, 9],
+      "echelles": [4, 5, 6, 7, 8]
     },
     7: {
-      "ilets": [1, 2, 7, 3, 6, 4],
-      "echelles": [1, 5, 4, 3, 2]
+      "ilets": [1, 2, 3, 6, 7, 4],
+      "echelles": [1, 2, 3, 4, 5]
     },
     8: {
-      "ilets": [1, 2, 4, 10, 5, 9, 6],
-      "echelles": [1, 2, 6, 5, 4, 3]
+      "ilets": [1, 2, 4, 5, 9, 10, 6],
+      "echelles": [1, 2, 3, 4, 5, 6]
     },
     9: {
-      "ilets": [7, 10, 5, 1, 3, 2, 8],
-      "echelles": [3, 5, 4, 2, 1, 6]
+      "ilets": [7, 1, 2, 3, 5, 10, 8],
+      "echelles": [1, 2, 3, 4, 5, 6]
     },
     10: {
-      "ilets": [5, 8, 6, 7, 3, 10, 4, 9],
-      "echelles": [3, 2, 1, 4, 7, 6, 5]
+      "ilets": [5, 3, 4, 6, 7, 8, 10, 9],
+      "echelles": [1, 2, 3, 4, 5, 6, 7]
     },
     12: {
-      "ilets": [1, 2, 10, 3, 9, 4, 8, 5],
+      "ilets": [1, 2, 3, 4, 8, 9, 10, 5],
       "echelles": [1, 8, 7, 6, 5, 4, 3]
     },
     13: {
-      "ilets": [3, 9, 2, 10, 7, 6, 1, 5, 4],
-      "echelles": [6, 7, 8, 3, 1, 5, 4, 1]
+      "ilets": [3, 1, 2, 5, 6, 7, 9, 10, 4],
+      "echelles": [1, 1, 3, 4, 5, 6, 7, 8]
     },
     14: {
-      "ilets": [7, 6, 10, 5, 4, 1, 9, 2, 8],
-      "echelles": [1, 4, 5, 1, 3, 8, 7, 6]
+      "ilets": [7, 1, 2, 4, 5, 6, 9, 10, 8],
+      "echelles": [1, 1, 3, 4, 5, 6, 7, 8]
     },
     15: {
-      "ilets": [2, 9, 1, 10, 4, 7, 3, 8, 5, 6],
-      "echelles": [7, 8, 9, 6, 3, 4, 5, 3, 1]
+      "ilets": [2, 9, 1, 10, 4, 7, 3, 8, 51, 3, 4, 5, 7, 8, 9, 10, 6],
+      "echelles": [1, 3, 3, 4, 5, 6, 7, 8, 9]
     },
     16: {
-      "ilets": [2, 9, 1, 10, 4, 6, 5, 7, 3, 8],
-      "echelles": [7, 8, 9, 6, 2, 1, 2, 4, 5]
+      "ilets": [2, 1, 3, 4, 5, 6, 7, 9, 10, 8],
+      "echelles": [1, 2, 2, 4, 5, 6, 7, 8, 9]
     }
   };
 
@@ -224,6 +224,8 @@
           } else {
             if (!$("#facteur").closest(".spot").is($(".spot:last"))) {
               return console.log("done");
+            } else {
+              return $("#facteur").addClass("pause");
             }
           }
         } else {
@@ -249,12 +251,12 @@
           }
         }
       };
-      climbAndJump();
       if (bleues === scales) {
         $("#echelles").append("<div id='gagne'>Oté, c'est gagné !</div>");
         $("#laReunion").fireworks();
         $(".echelle").draggable("destroy");
         $("#mafate").sortable("destroy");
+        climbAndJump();
         $(".level[data-level='" + CURRENT_LEVEL + "']").addClass("green");
         return delay(5000, function() {
           return $("#parametres").show();

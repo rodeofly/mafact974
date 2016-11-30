@@ -113,7 +113,7 @@ html {
   background: rgba(255,255,255,1);
   width : 800px;
   height : 600px; 
-  background: url( images/FDM.png) no-repeat;
+  background: url( images/FDM.jpg) no-repeat;
 }
 
 #levels {
@@ -206,10 +206,21 @@ html {
 
 #facteur {
     position : absolute;
-    background: url(images/facteur.png) no-repeat;
-    width : 50px;
+    width : 30px;
     height:50px;
-    
+    background: url(images/facteur.png) no-repeat;
+}
+
+#facteur.pause {
+    position : absolute;
+    width : 30px;
+    height:50px;
+    background: url(images/facteurPause.png) left center;
+    animation: play 1s steps(6) infinite;
+}
+
+@keyframes play {
+   100% { background-position: -180px; }
 }
 
 .spot:last {
