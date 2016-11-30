@@ -111,7 +111,7 @@ $ ->
       color : "grey"
   
   
-  html =  "<div id='close'>X</div><div id='levels'>"
+  html =  "<div id='close'>x</div><div id='levels'>"
   html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [1..16]
   html += "<div class='more'>+</div>"
   html += """
@@ -140,12 +140,11 @@ $ ->
         curr_alt = parseInt $(this).find( ".ilet" ).attr( "data-altitude" )
         next_alt = parseInt $next_spot.find( ".ilet" ).attr( "data-altitude" )
         deniv = curr_alt - next_alt
-        height = Math.abs(deniv)
-        x = if (deniv > 0) then next_alt else curr_alt
-        bottom = "#{x*50}px"
+        height = Math.abs deniv
+        yPos = if (deniv > 0) then next_alt else curr_alt
         via.attr("data-denivelle", deniv).css
           height: "#{height*50}px"
-          bottom: "#{bottom}"
+          bottom: "#{yPos*50}px"
         if via.find( ".echelle" ).length > 0
           scale  = parseInt( via.find( ".echelle" ).attr("data-hauteur") )
           if scale is height
@@ -169,21 +168,13 @@ $ ->
             via.find( ".echelle").append $( "#facteur")
             i = Math.abs d 
             if d>0
-              $( "#facteur" ).css
-                bottom: "auto"
-                top: "-50px"
-                left: "40%"
+              $( "#facteur" ).css bottom: "auto", top: "-50px", left: "40%"
               climbAndJump(1, i)
             else
-              $( "#facteur" ).css
-                top:"auto"
-                bottom: "0px"
-                left: "40%"
+              $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
               climbAndJump(-1, i) 
         else
-          if not $( "#facteur" ).closest( ".spot" ).is $( ".spot:last") 
-            console.log "done"
-          else
+          if $( "#facteur" ).closest( ".spot" ).is $( ".spot:last") 
             $( "#facteur" ).addClass "pause"
       else
         if i
@@ -209,63 +200,44 @@ $ ->
       climbAndJump()
       $( ".level[data-level='#{CURRENT_LEVEL}']" ).addClass "green"
       delay 5000, -> $( "#parametres" ).show()
-   
-      
- 
-     
+
   draw = ->
     $( "#mafate, #echelles" ).empty()
+    
     for i in ILETS
       ilet = new Ilet(i)
       $( "#mafate" ).append ilet.html
-      $( ".ilet[data-altitude='#{ilet.altitude}']" ).css height: "#{50*i}px"
-    
+      $( ".ilet[data-altitude='#{ilet.altitude}']" ).css height: "#{50*i}px"   
     height = $( "#mafate .ilet:first" ).attr "data-altitude"
     $( "#riveG" ).css 
       backgroundSize: "100px #{height*50}px"
       backgroundPosition: "bottom"   
-
-
     $( ".spot:first .ilet" ).append "<div id='facteur'></div>"  
-    $( "#facteur" ).css
-      top: "-50px"
-      left: "40%"
-    
+    $( "#facteur" ).css top: "-50px", left: "40%"
     height = $( "#mafate .ilet:last" ).attr "data-altitude"  
     h = $( ".spot:last" ).height()-height*50
-    $( ".spot:last" ).css  
-      background: "url(css/images/case.png) no-repeat"
-      backgroundPosition: "25px #{h-50}px"
-    $( "#riveD" ).css
-      backgroundSize: "100px #{height*50}px"
-      backgroundPosition: "bottom"     
+    $( ".spot:last" ).css background: "url(css/images/case.png) no-repeat", backgroundPosition: "5px #{h-50}px"
+    $( "#riveD" ).css backgroundSize: "100px #{height*50}px", backgroundPosition: "bottom"     
      
     for i in ECHELLES
       echelle = new Echelle(i)
       $( "#echelles" ).append echelle.html
       echelle = $( ".echelle[data-hauteur='#{echelle.hauteur}']" )
-      mini echelle
-    
+      mini echelle 
     $( "#mafate" ).sortable
       items: '.spot:not(:first, :last)'
       stop: -> 
         $( ".spot:first .ilet" ).append $( "#facteur" )
         checkit()
-      
-     
+       
     $( "#echelles" ).draggable containment: "#laReunion"
     $( ".echelle" ).draggable
       helper: "clone"
       appendTo: "body"
-      revert: (valid_drop) ->
-        if not valid_drop
-          if $(this).parent().is "#echelles"
-            mini $(this)
-        else true
+      revert: (valid_drop) -> if not valid_drop and $(this).parent().is( "#echelles" ) then mini $(this) else true
       start : (event, ui) -> 
         ui.helper.css('z-index', "10")
         maxi ui.helper
-
 
     $( "#echelles, #mafate" ).droppable
       tolerance : 'touch'        
@@ -274,11 +246,10 @@ $ ->
         ui.helper.remove()
         $( "#echelles"  ).append ui.draggable
         mini ui.draggable
-        
-    
+            
     $( ".via" ).droppable
       tolerance : 'touch'        
-      accept    : '.echelle'    
+      accept    : (d) -> return d.is( ".echelle" ) and $(this).is( ":empty" )
       activeClass : "shine-yellow"
       hoverClass  : "shine-white"
       drop: ( event, ui ) ->
@@ -377,6 +348,5 @@ $ ->
   
   $( ".level[data-level='1']" ).trigger "click"
   $( "#param_button" ).trigger "click"
-  
   
 
