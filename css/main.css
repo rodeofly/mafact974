@@ -318,6 +318,14 @@ a#solution {
 
 #close { position:absolute; width: 25px; height: 25px; top: 5px; left : 5px; }
 
+#credits {
+  position : absolute;
+  top   : 1vw;
+  right    : 1vw;
+font-family: 'Lobster', cursive;
+  font-size  : 1em;
+  color : white;
+}
 /* ==========================================================================
    Media Queries
    ========================================================================== */

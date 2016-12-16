@@ -6,7 +6,6 @@ Array::shuffle ?= ->
 
 delay = (ms, func) -> setTimeout func, ms
 
-
 ID = 1
 SOLUTION = [] 
 ILETS = []
@@ -59,9 +58,10 @@ CHALLENGES =
   16:
     "ilets": [2, 1, 3, 4, 5, 6, 7, 9, 10, 8]
     "echelles": [1,2, 2, 4, 5, 6, 7, 8, 9]
-      
 
+######################################################     
 class Ilet
+######################################################
   constructor: (@altitude) ->
     @html = """
     <div class='spot'>
@@ -71,59 +71,61 @@ class Ilet
         <div class='via' data-denivelle='0'></div>
     </div>
     """
-    
+######################################################   
 class Echelle
+######################################################
   constructor: (@hauteur) ->
     @html = """
     <div class='echelle' data-hauteur='#{@hauteur}'>
       <span class='info'>#{@hauteur}</span>
     </div>
     """
-  
-$ ->
-  #reduire une echelle lorsqu'elle retourne sur le nuage
-  mini = (echelle) ->
-    h = echelle.attr "data-hauteur"
-    echelle.css
-      position: "relative"
-      height: "#{25*h}px"
-      width: "25px"
-      backgroundSize: "100% 100%"
-      background: "url(css/images/uniteS.png) repeat-y"
-    echelle.find( ".info" ).css
-      top : "5px"
-      left : "8px"
-      fontSize : "1em"
-      color : "black"
-  #augmenter une echelle lorsqu'elle quitte le nuage 
-  maxi = (echelle) ->
-    h = echelle.attr "data-hauteur"
-    echelle.css 
-      position : "absolute"
-      height: "#{50*h}px"
-      width: "50px"
-      backgroundSize: "100% 100%"
-      background: "url(css/images/unite.png) repeat-y"
-    echelle.find( ".info" ).css
-      top : "10px"
-      left : "15px"
-      fontSize : "2em"
-      color : "grey"
-  
-  
-  html =  "<div id='close'>x</div><div id='levels'>"
-  html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [1..16]
-  html += "<div class='more'>+</div>"
-  html += """
-  <div id='more'>
-      <div id='random'>Aléatoire</div>
-      <div id='solution'>Soluce</div>
-      <div id='sliderInfo'>Niveaux :
-          <span id='amount-slider'></span>
-          <div id='slider'></div>
-      </div>
-   </div></div>"""
-  
+#reduire une echelle lorsqu'elle retourne sur le nuage
+mini = (echelle) ->
+  h = echelle.attr "data-hauteur"
+  echelle.css
+    position: "relative"
+    height: "#{25*h}px"
+    width: "25px"
+    backgroundSize: "100% 100%"
+    background: "url(css/images/uniteS.png) repeat-y"
+  echelle.find( ".info" ).css
+    top : "5px"
+    left : "8px"
+    fontSize : "1em"
+    color : "black"
+#augmenter une echelle lorsqu'elle quitte le nuage 
+maxi = (echelle) ->
+  h = echelle.attr "data-hauteur"
+  echelle.css 
+    position : "absolute"
+    height: "#{50*h}px"
+    width: "50px"
+    backgroundSize: "100% 100%"
+    background: "url(css/images/unite.png) repeat-y"
+  echelle.find( ".info" ).css
+    top : "10px"
+    left : "15px"
+    fontSize : "2em"
+    color : "grey"
+
+######################################################
+# Construction du menu
+######################################################
+html =  "<div id='close'>x</div><div id='levels'>"
+html += "<div class='level' data-level='#{i}'>#{i}</div>" for i in [1..16]
+html += "<div class='more'>+</div>"
+html += """
+<div id='more'>
+    <div id='random'>Aléatoire</div>
+    <div id='solution'>Soluce</div>
+    <div id='sliderInfo'>Niveaux :
+        <span id='amount-slider'></span>
+        <div id='slider'></div>
+    </div>
+ </div></div>"""
+
+$ ->  
   $( "#parametres" ).append html
   $( "#parametres" ).draggable()
   $( "#param_button" ).button().on "click", ->
