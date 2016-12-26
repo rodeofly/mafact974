@@ -241,6 +241,18 @@ $ ->
         ui.helper.css('z-index', "10")
         maxi ui.helper
 
+    $( ".echelle" ).on "dblclick", ->
+            current_scale = $(this)
+            scale_height = current_scale.data('hauteur')
+            for via in $("#mafate").find(".via[data-denivelle!=0]")
+                if $(via).find('.echelle').length
+                    continue
+                if Math.abs( $(via).data( "denivelle" ) ) == scale_height
+                    $(via).append current_scale
+                    maxi current_scale
+                    checkit()
+                    break
+
     $( "#echelles, #mafate" ).droppable
       tolerance : 'touch'        
       accept    : '.echelle'    
