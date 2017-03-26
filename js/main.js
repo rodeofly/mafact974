@@ -499,7 +499,7 @@
     random = function(n) {
       var g, genere, k;
       genere = function(xz, n) {
-        var epsilon, k, len, o, p, q, r, ref, ref1, ref2, ref3, ref4, ref5, results, results1, s, sigma, t, tau, x, y;
+        var epsilon, k, len, o, p, q, r, ref, ref1, ref2, ref3, ref4, results, results1, s, sigma, t, tau, x, y;
         epsilon = [];
         for (k = o = 1, ref = n + 1; 1 <= ref ? o <= ref : o >= ref; k = 1 <= ref ? ++o : --o) {
           epsilon.push(2 * randint(0, 1) - 1);
@@ -517,18 +517,18 @@
         }
         console.log("y = " + y);
         sigma = [0];
-        ref4 = (function() {
+        ref3 = (function() {
           results1 = [];
-          for (var s = 1, ref3 = n + 1; 1 <= ref3 ? s <= ref3 : s >= ref3; 1 <= ref3 ? s++ : s--){ results1.push(s); }
+          for (var s = 1; 1 <= n ? s <= n : s >= n; 1 <= n ? s++ : s--){ results1.push(s); }
           return results1;
         }).apply(this).shuffle();
-        for (r = 0, len = ref4.length; r < len; r++) {
-          k = ref4[r];
+        for (r = 0, len = ref3.length; r < len; r++) {
+          k = ref3[r];
           sigma.push(k);
         }
         console.log("sigma = " + sigma);
         x = [xz];
-        for (k = t = 1, ref5 = n; 1 <= ref5 ? t <= ref5 : t >= ref5; k = 1 <= ref5 ? ++t : --t) {
+        for (k = t = 1, ref4 = n; 1 <= ref4 ? t <= ref4 : t >= ref4; k = 1 <= ref4 ? ++t : --t) {
           x.push(y[sigma[k]]);
         }
         x[n + 1] = y[n + 1];

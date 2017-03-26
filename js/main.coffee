@@ -329,16 +329,16 @@ $ ->
 
     #Merci Quentin Pradet ! pquentin@github
     $( ".echelle" ).on "click", ->
-            current_scale = $(this)
-            scale_height = current_scale.data('hauteur')
-            for via in $("#mafate").find(".via[data-denivelle!=0]")
-                if $(via).find('.echelle').length
-                    continue
-                if Math.abs( $(via).data( "denivelle" ) ) == scale_height
-                    $(via).append current_scale
-                    maxi current_scale
-                    checkit()
-                    break
+      current_scale = $(this)
+      scale_height = current_scale.data('hauteur')
+      for via in $("#mafate").find(".via[data-denivelle!=0]")
+        if $(via).find('.echelle').length
+          continue
+        if Math.abs( $(via).data( "denivelle" ) ) == scale_height
+          $(via).append current_scale
+          maxi current_scale
+          checkit()
+          break
 
     $( "#echelles, #mafate" ).droppable
       tolerance : 'touch'        
@@ -395,7 +395,7 @@ $ ->
       console.log "y = #{y}"
       #on genere la permutation sigma
       sigma = [0]
-      sigma.push(k) for k in [1..n+1].shuffle()
+      sigma.push(k) for k in [1..n].shuffle()
       console.log "sigma = #{sigma}"
       #on genere x
       x=[xz]
