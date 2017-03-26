@@ -191,13 +191,13 @@ html {
   position : absolute;
   bottom:0;
   width : 100%;
-  background: url(images/strate.png) repeat;
+  background: #53d975 url(images/strate.png) repeat;
   border : solid black 2px;
   border-radius: 25px 25px 0px 0px;
 }
 
 .spot:first-of-type .ilet, .spot:last-of-type .ilet {
-  background: url(images/strateB.png) repeat;
+  background: #25aa47 url(images/strate.png) repeat;
 }
 
 .spot:first {

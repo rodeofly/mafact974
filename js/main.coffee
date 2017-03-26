@@ -159,39 +159,72 @@ $ ->
     bleues = $( ".shine-right" ).length
     scales = $( ".echelle" ).length
     
-    delai = 100
+    delai = 1000
     climbAndJump = (c, i) ->
       parent = $( "#facteur" ).parent()
       if parent.hasClass "ilet"
+        #console.log "in ilet"
         via = parent.siblings ".via"
+
         if via.find( ".echelle").length > 0 
-          d = parseInt via.attr( "data-denivelle" )
+
           delay delai, -> 
+            d = parseInt via.attr( "data-denivelle" )
             via.find( ".echelle").append $( "#facteur")
-            i = Math.abs d 
-            if d>0
-              $( "#facteur" ).css bottom: "auto", top: "-50px", left: "40%"
-              climbAndJump(1, i)
-            else
-              $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
-              climbAndJump(-1, i) 
+            i = Math.abs d         
+            altitude = parseInt $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" ).attr( "data-altitude" )
+            console.log altitude
+            switch d>0
+              when true
+                if altitude < 0
+                  console.log "echelle descend vers le négatif"
+                  $( "#facteur" ).css top: "-50px", bottom: "auto", left: "40%"
+                else
+                  console.log "echelle descend vers le positif"
+                  $( "#facteur" ).css top: "-50px", bottom: "auto", left: "40%"
+                climbAndJump(1, i)
+              else
+                if altitude < 0
+                  console.log "echelle monte vers le négatif"
+                  $( "#facteur" ).css top: "50px", bottom: "auto", left: "40%"
+                else
+                  console.log "echelle descend vers le positif"
+                  $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
+                climbAndJump(-1, i) 
         else
-          if $( "#facteur" ).closest( ".spot" ).is $( ".spot:last") 
+          if $( "#facteur" ).closest( ".spot" ).is $( ".spot:last")
+            if altitude < 0
+              $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
+             
             $( "#facteur" ).addClass "pause"
       else
+        # console.log "in echelle"
+        altitude = parseInt $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" ).attr( "data-altitude" )
         if i
           i--
           alt = parseInt $( "#facteur" ).css( "top" )
-          delay delai, -> 
-            $( "#facteur" ).css top: "#{alt+c*50}px"
+          delay delai, ->
+            if altitude < 0
+              $( "#facteur" ).css top: "#{alt+c*50}px"
+            else
+              $( "#facteur" ).css top: "#{alt+c*50}px"
             climbAndJump(c, i)
         else
-          spot = $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" )
+          #console.log "in da flood #{altitude}"
+          ilet = $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" )
           delay delai, -> 
-            spot.append $( "#facteur" )
-            $( "#facteur" ).css
-              top: "-50px"
-              left: "40%"
+            ilet.append $( "#facteur" )
+            
+            if altitude < 0
+              $( "#facteur" ).css
+                top: "#{ilet.height()-50}px"
+                left: "40%"
+
+            else
+              $( "#facteur" ).css
+                top: "-50px"
+                left: "40%"
+
             climbAndJump(c, i)   
     
     if bleues is scales
@@ -213,9 +246,29 @@ $ ->
       ilet.css 
         height: "#{50*Math.abs(i)}px"  
         backgroundPosition: "5px #{h-50}px"
-        bottom : if i <0 then "#{50*i}px" else "0px"
       if i<0
+        ilet.css 
+          bottom : "#{50*i}px"
+          background: "#c6c4f1 url(images/strate.png) repeat"
         ilet.find( ".info").css bottom: "0px"
+      else
+        ilet.css 
+          bottom : "0px"
+    
+    $( ".ilet" ).first().addClass "first-ilet"
+    $( ".ilet" ).last().addClass "last-ilet"
+    f = parseInt $( ".first-ilet" ).attr( "data-altitude" )
+    l = parseInt $( ".last-ilet" ).attr( "data-altitude" )
+    if f < 0
+      $( ".first-ilet" ).css
+        background: "#1007cb url(images/strate.png) repeat"
+      $( ".first-ilet" ).find( ".info").css color: "white"
+    if l < 0
+      $( ".last-ilet" ).css
+        background: "#1007cb url(images/strate.png) repeat"
+      $( ".last-ilet" ).find( ".info").css color: "white"
+   
+        
         
     height = $( "#mafate .ilet:first" ).attr "data-altitude"
     $( "#riveG" ).css 
@@ -314,8 +367,7 @@ $ ->
     genere(randint(1,n), n)
     ECHELLES = ( k for k in [1..n+1].shuffle())     
     ILETS = SOLUTION
-    first = ILETS.shift()
-    last = ILETS.pop()
+    [first, last] = [ILETS.shift(), ILETS.pop()]
     ILETS.shuffle()
     ILETS = [first].concat( ILETS ).concat [last]
     draw()
