@@ -344,7 +344,7 @@
         if (i < 0) {
           ilet.css({
             bottom: (50 * i) + "px",
-            background: "#c6c4f1 url(images/strate.png) repeat"
+            background: "#c6c4f1 url(css/images/strate.png) repeat"
           });
           ilet.find(".info").css({
             bottom: "0px"
@@ -361,7 +361,7 @@
       l = parseInt($(".last-ilet").attr("data-altitude"));
       if (f < 0) {
         $(".first-ilet").css({
-          background: "#1007cb url(images/strate.png) repeat"
+          background: "#1007cb url(css/images/strate.png) repeat"
         });
         $(".first-ilet").find(".info").css({
           color: "white"
@@ -369,7 +369,7 @@
       }
       if (l < 0) {
         $(".last-ilet").css({
-          background: "#1007cb url(images/strate.png) repeat"
+          background: "#1007cb url(css/images/strate.png) repeat"
         });
         $(".last-ilet").find(".info").css({
           color: "white"
@@ -497,7 +497,7 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     };
     random = function(n) {
-      var first, genere, k, last, ref;
+      var g, genere, k;
       genere = function(xz, n) {
         var epsilon, k, len, o, p, q, r, ref, ref1, ref2, ref3, ref4, ref5, results, results1, s, sigma, t, tau, x, y;
         epsilon = [];
@@ -533,27 +533,19 @@
         }
         x[n + 1] = y[n + 1];
         console.log("x = " + x);
-        return SOLUTION = y;
+        return [y, x];
       };
-      genere(randint(1, n), n);
       ECHELLES = (function() {
-        var len, o, p, ref, ref1, results, results1;
-        ref1 = (function() {
-          results1 = [];
-          for (var p = 1, ref = n + 1; 1 <= ref ? p <= ref : p >= ref; 1 <= ref ? p++ : p--){ results1.push(p); }
-          return results1;
-        }).apply(this).shuffle();
+        var o, ref, results;
         results = [];
-        for (o = 0, len = ref1.length; o < len; o++) {
-          k = ref1[o];
+        for (k = o = 1, ref = n + 1; 1 <= ref ? o <= ref : o >= ref; k = 1 <= ref ? ++o : --o) {
           results.push(k);
         }
         return results;
       })();
-      ILETS = SOLUTION;
-      ref = [ILETS.shift(), ILETS.pop()], first = ref[0], last = ref[1];
-      ILETS.shuffle();
-      ILETS = [first].concat(ILETS).concat([last]);
+      g = genere(randint(1, n), n);
+      SOLUTION = g[0];
+      ILETS = g[1];
       draw();
       return checkit();
     };

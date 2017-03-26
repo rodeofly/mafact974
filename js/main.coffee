@@ -275,7 +275,7 @@ $ ->
       if i<0
         ilet.css 
           bottom : "#{50*i}px"
-          background: "#c6c4f1 url(images/strate.png) repeat"
+          background: "#c6c4f1 url(css/images/strate.png) repeat"
         ilet.find( ".info").css bottom: "0px"
       else
         ilet.css 
@@ -287,11 +287,11 @@ $ ->
     l = parseInt $( ".last-ilet" ).attr( "data-altitude" )
     if f < 0
       $( ".first-ilet" ).css
-        background: "#1007cb url(images/strate.png) repeat"
+        background: "#1007cb url(css/images/strate.png) repeat"
       $( ".first-ilet" ).find( ".info").css color: "white"
     if l < 0
       $( ".last-ilet" ).css
-        background: "#1007cb url(images/strate.png) repeat"
+        background: "#1007cb url(css/images/strate.png) repeat"
       $( ".last-ilet" ).find( ".info").css color: "white"
    
         
@@ -402,15 +402,13 @@ $ ->
       x.push( y[sigma[k]] ) for k in [1..n]  
       x[n+1] = y[n+1]
       console.log "x = #{x}"
-      
-      SOLUTION = y
+      return [y,x]
     
-    genere(randint(1,n), n)
-    ECHELLES = ( k for k in [1..n+1].shuffle())     
-    ILETS = SOLUTION
-    [first, last] = [ILETS.shift(), ILETS.pop()]
-    ILETS.shuffle()
-    ILETS = [first].concat( ILETS ).concat [last]
+
+    ECHELLES = ( k for k in [1..n+1])
+    g =   genere(randint(1,n), n)
+    SOLUTION = g[0]
+    ILETS = g[1]
     draw()
     checkit()
   
