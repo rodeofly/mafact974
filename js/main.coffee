@@ -327,7 +327,8 @@ $ ->
         ui.helper.css('z-index', "10")
         maxi ui.helper
 
-    $( ".echelle" ).on "dblclick", ->
+    #Merci Quentin Pradet ! pquentin@github
+    $( ".echelle" ).on "click", ->
             current_scale = $(this)
             scale_height = current_scale.data('hauteur')
             for via in $("#mafate").find(".via[data-denivelle!=0]")
