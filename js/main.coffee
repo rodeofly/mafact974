@@ -125,6 +125,18 @@ html += """
     </div>
  </div></div>"""
 
+
+audioElement = document.createElement('audio');
+audioElement.setAttribute('src', 'sounds/maloya-fast.wav');
+audioElement.load()
+#audioElement.addEventListener('ended', () -> 
+#  this.currentTime = 0
+#  this.play()
+#, false)
+
+
+
+
 $ ->  
   $( "#parametres" ).append html
   $( "#parametres" ).draggable()
@@ -159,22 +171,35 @@ $ ->
     bleues = $( ".shine-right" ).length
     scales = $( ".echelle" ).length
     
-    delai = 1000
+    delai = 100
     climbAndJump = (c, i) ->
+      diveornot = () ->
+        offset = $( "#facteur" ).offset()
+        altimetre =  (parseInt($( "#laReunion" ).height()) - parseInt(offset.top)) + 50
+        console.log "altimetre = #{altimetre}"
+        if altimetre < 0
+          $( "#facteur" ).addClass "dive"
+        else
+          console.log "undive"
+          $( "#facteur" ).removeClass "dive"
+
+      diveornot()
       parent = $( "#facteur" ).parent()
       if parent.hasClass "ilet"
         #console.log "in ilet"
-        via = parent.siblings ".via"
+        via = parent.siblings ".via:first()"
 
         if via.find( ".echelle").length > 0 
-
           delay delai, -> 
             d = parseInt via.attr( "data-denivelle" )
             via.find( ".echelle").append $( "#facteur")
             i = Math.abs d         
             altitude = parseInt $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" ).attr( "data-altitude" )
-            console.log altitude
+            
+            
+                      
             switch d>0
+              
               when true
                 if altitude < 0
                   console.log "echelle descend vers le négatif"
@@ -186,9 +211,9 @@ $ ->
               else
                 if altitude < 0
                   console.log "echelle monte vers le négatif"
-                  $( "#facteur" ).css top: "50px", bottom: "auto", left: "40%"
+                  $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
                 else
-                  console.log "echelle descend vers le positif"
+                  console.log "echelle monte vers le positif"
                   $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
                 climbAndJump(-1, i) 
         else
@@ -197,6 +222,7 @@ $ ->
               $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
              
             $( "#facteur" ).addClass "pause"
+            audioElement.play()
       else
         # console.log "in echelle"
         altitude = parseInt $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" ).attr( "data-altitude" )
@@ -331,6 +357,8 @@ $ ->
             if $(this).parent().is( "#echelles" )
               mini $(this)
             return true
+    
+    
   
   # Returns a random number between min (inclusive) and max (exclusive)
   randFloat = (min, max) -> return Math.random() * (max - min) + min

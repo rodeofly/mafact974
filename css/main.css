@@ -211,11 +211,23 @@ html {
     background: url(images/facteur.png) no-repeat;
 }
 
+#facteur.dive {
+  background: url(images/facteur-dive.png) no-repeat;
+  }
+
 #facteur.pause {
     position : absolute;
     width : 30px;
     height:50px;
     background: url(images/facteurPause.png) left center;
+    animation: play 1s steps(6) infinite;
+}
+
+#facteur.dive.pause {
+    position : absolute;
+    width : 30px;
+    height:50px;
+    background: url(images/facteurPause-dive.png) left center;
     animation: play 1s steps(6) infinite;
 }
 
