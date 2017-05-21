@@ -23,10 +23,10 @@ CHALLENGES =
     "ilets": [3, 1, 10, 9]
     "echelles": [7, 8, 9]
   4:
-    "ilets": [1, 2, 4, 5, 3]
+    "ilets": [1, 4, 2, 5, 3]
     "echelles": [1, 2, 3, 4]
   5:
-    "ilets": [1, 4, 9, 10, 2]
+    "ilets": [1, 9, 4, 10, 2]
     "echelles": [5, 6, 7, 9]
   6:
     "ilets": [1, 2, 5, 8, 10, 9]
@@ -129,15 +129,30 @@ html += """
 audioElement = document.createElement('audio');
 audioElement.setAttribute('src', 'sounds/maloya-fast.wav');
 audioElement.load()
-#audioElement.addEventListener('ended', () -> 
-#  this.currentTime = 0
-#  this.play()
-#, false)
+
+audioElement.addEventListener('timeupdate', () ->
+  buffer = .41
+  if (this.currentTime > this.duration - buffer)
+    this.currentTime = 0
+    this.play()
+, false)
 
 
 
 
-$ ->  
+$ ->
+  ####################################################################
+  #Merci Quentin Pradet ! pquentin@github
+  $( "body" ).on "click", ".echelle", ->
+    current_scale = $(this)
+    scale_height = current_scale.data('hauteur')
+    via = $(".via[data-denivelle=#{scale_height}], .via[data-denivelle=#{-scale_height}]").first()
+    if $(via).length  
+      $(via).append current_scale
+      maxi current_scale
+      checkit()
+  ###################################################################
+      
   $( "#parametres" ).append html
   $( "#parametres" ).draggable()
   $( "#param_button" ).button().on "click", ->
@@ -222,7 +237,7 @@ $ ->
               $( "#facteur" ).css top: "auto", bottom: "0px", left: "40%"
              
             $( "#facteur" ).addClass "pause"
-            audioElement.play()
+
       else
         # console.log "in echelle"
         altitude = parseInt $( "#facteur" ).closest( ".spot" ).next(".spot").find( ".ilet" ).attr( "data-altitude" )
@@ -254,6 +269,7 @@ $ ->
             climbAndJump(c, i)   
     
     if bleues is scales
+      audioElement.play()
       $( "#echelles" ).append "<div id='gagne'>Oté, c'est gagné !</div>"
       $( "#laReunion" ).fireworks()
       $( ".echelle" ).draggable( "destroy" )
@@ -261,6 +277,7 @@ $ ->
       climbAndJump()
       $( ".level[data-level='#{CURRENT_LEVEL}']" ).addClass "green"
       delay 5000, -> $( "#parametres" ).show()
+    
 
   draw = ->
     $( "#mafate, #echelles" ).empty()
@@ -327,19 +344,6 @@ $ ->
         ui.helper.css('z-index', "10")
         maxi ui.helper
 
-    #Merci Quentin Pradet ! pquentin@github
-    $( ".echelle" ).on "click", ->
-      current_scale = $(this)
-      scale_height = current_scale.data('hauteur')
-      for via in $("#mafate").find(".via[data-denivelle!=0]")
-        if $(via).find('.echelle').length
-          continue
-        if Math.abs( $(via).data( "denivelle" ) ) == scale_height
-          $(via).append current_scale
-          maxi current_scale
-          checkit()
-          break
-
     $( "#echelles, #mafate" ).droppable
       tolerance : 'touch'        
       accept    : '.echelle'    
@@ -371,7 +375,7 @@ $ ->
               mini $(this)
             return true
     
-    
+   
   
   # Returns a random number between min (inclusive) and max (exclusive)
   randFloat = (min, max) -> return Math.random() * (max - min) + min
@@ -428,21 +432,24 @@ $ ->
   $( ".level" )
     .button()
     .on "click", ->
+      audioElement.pause()
       $( "#parametres" ).hide()
       level = parseInt $(this).attr( "data-level" )
       $( "#gagne" ).remove()
       $( "#laReunion" ).fireworks( 'destroy' )
-      SOLUTION = CHALLENGES[level].ilets
       ECHELLES = CHALLENGES[level].echelles.shuffle()
-      ILETS = SOLUTION.slice(0)
-      [first, last] = [ILETS.shift(), ILETS.pop()]
-      ILETS = [first].concat( ILETS.shuffle() ).concat [last]
+      ILETS = CHALLENGES[level].ilets     
+      #ILETS = SOLUTION.slice(0) #clone le vecteur sinon ça pointe !
+      #[first, last] = [ILETS.shift(), ILETS.pop()]
+      #ILETS = [first].concat( ILETS.shuffle() ).concat [last]   
       SOLUTION = []
       CURRENT_LEVEL = level
       draw()
       checkit()
   
-  $( "#close" ).button().on "click", -> $( "#parametres" ).hide()
+  $( "#close" ).button().on "click", -> 
+    audioElement.pause()
+    $( "#parametres" ).hide()
       
   $( "#random" ).button()
     .on "click", ->
@@ -461,5 +468,7 @@ $ ->
   
   $( ".level[data-level='1']" ).trigger "click"
   $( "#param_button" ).trigger "click"
+  
+  
   
 

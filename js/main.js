@@ -43,11 +43,11 @@
       "echelles": [7, 8, 9]
     },
     4: {
-      "ilets": [1, 2, 4, 5, 3],
+      "ilets": [1, 4, 2, 5, 3],
       "echelles": [1, 2, 3, 4]
     },
     5: {
-      "ilets": [1, 4, 9, 10, 2],
+      "ilets": [1, 9, 4, 10, 2],
       "echelles": [5, 6, 7, 9]
     },
     6: {
@@ -164,8 +164,28 @@
 
   audioElement.load();
 
+  audioElement.addEventListener('timeupdate', function() {
+    var buffer;
+    buffer = .41;
+    if (this.currentTime > this.duration - buffer) {
+      this.currentTime = 0;
+      return this.play();
+    }
+  }, false);
+
   $(function() {
     var checkit, draw, randFloat, randint, random;
+    $("body").on("click", ".echelle", function() {
+      var current_scale, scale_height, via;
+      current_scale = $(this);
+      scale_height = current_scale.data('hauteur');
+      via = $(".via[data-denivelle=" + scale_height + "], .via[data-denivelle=" + (-scale_height) + "]").first();
+      if ($(via).length) {
+        $(via).append(current_scale);
+        maxi(current_scale);
+        return checkit();
+      }
+    });
     $("#parametres").append(html);
     $("#parametres").draggable();
     $("#param_button").button().on("click", function() {
@@ -276,8 +296,7 @@
                   left: "40%"
                 });
               }
-              $("#facteur").addClass("pause");
-              return audioElement.play();
+              return $("#facteur").addClass("pause");
             }
           }
         } else {
@@ -318,6 +337,7 @@
         }
       };
       if (bleues === scales) {
+        audioElement.play();
         $("#echelles").append("<div id='gagne'>Oté, c'est gagné !</div>");
         $("#laReunion").fireworks();
         $(".echelle").draggable("destroy");
@@ -426,28 +446,6 @@
           ui.helper.css('z-index', "10");
           return maxi(ui.helper);
         }
-      });
-      $(".echelle").on("click", function() {
-        var current_scale, len2, q, ref, results, scale_height, via;
-        current_scale = $(this);
-        scale_height = current_scale.data('hauteur');
-        ref = $("#mafate").find(".via[data-denivelle!=0]");
-        results = [];
-        for (q = 0, len2 = ref.length; q < len2; q++) {
-          via = ref[q];
-          if ($(via).find('.echelle').length) {
-            continue;
-          }
-          if (Math.abs($(via).data("denivelle")) === scale_height) {
-            $(via).append(current_scale);
-            maxi(current_scale);
-            checkit();
-            break;
-          } else {
-            results.push(void 0);
-          }
-        }
-        return results;
       });
       $("#echelles, #mafate").droppable({
         tolerance: 'touch',
@@ -565,22 +563,21 @@
       }
     });
     $(".level").button().on("click", function() {
-      var first, last, level, ref;
+      var level;
+      audioElement.pause();
       $("#parametres").hide();
       level = parseInt($(this).attr("data-level"));
       $("#gagne").remove();
       $("#laReunion").fireworks('destroy');
-      SOLUTION = CHALLENGES[level].ilets;
       ECHELLES = CHALLENGES[level].echelles.shuffle();
-      ILETS = SOLUTION.slice(0);
-      ref = [ILETS.shift(), ILETS.pop()], first = ref[0], last = ref[1];
-      ILETS = [first].concat(ILETS.shuffle()).concat([last]);
+      ILETS = CHALLENGES[level].ilets;
       SOLUTION = [];
       CURRENT_LEVEL = level;
       draw();
       return checkit();
     });
     $("#close").button().on("click", function() {
+      audioElement.pause();
       return $("#parametres").hide();
     });
     $("#random").button().on("click", function() {
@@ -604,5 +601,3 @@
   });
 
 }).call(this);
-
-//# sourceMappingURL=main.js.map
